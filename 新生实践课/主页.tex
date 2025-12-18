@@ -1,0 +1,325 @@
+\documentclass[supercite]{Experimental_Report}
+\documentclass{article}
+
+\title{~~~~~~新生实践课~~~~~~}
+\author{贾柠泽}
+\school{计算机科学与技术学院}
+\classnum{CS2306}
+\stunum{U202315594}
+\instructor{李榕} % 李平、孙伟平、范晔斌、陈加忠
+\date{\today}
+
+\usepackage{algorithm, multirow}
+\usepackage{algpseudocode}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{framed}
+\usepackage{mathtools}
+\usepackage{subcaption}
+\usepackage{xltxtra} %提供了针对XeTeX的改进并且加入了XeTeX的LOGO, 自动调用xunicode宏包(提供Unicode字符宏)
+\usepackage{bm}
+\usepackage{tikz}
+\usepackage{tikzscale}
+\usepackage{pgfplots}
+\usepackage{graphicx}
+\usepackage{wrapfig}
+%\usepackage{enumerate}
+
+\pgfplotsset{compat=1.16}
+
+\newcommand{\cfig}[3]{
+  \begin{figure}[htb]
+    \centering
+    \includegraphics[width=#2\textwidth]{images/#1.tikz}
+    \caption{#3}
+    \label{fig:#1}
+  \end{figure}
+}
+
+\newcommand{\sfig}[3]{
+  \begin{subfigure}[b]{#2\textwidth}
+    \includegraphics[width=\textwidth]{images/#1.tikz}
+    \caption{#3}
+    \label{fig:#1}
+  \end{subfigure}
+}
+
+\newcommand{\xfig}[3]{
+  \begin{figure}[htb]
+    \centering
+    #3
+    \caption{#2}
+    \label{fig:#1}
+  \end{figure}
+}
+
+\newcommand{\rfig}[1]{\autoref{fig:#1}}
+\newcommand{\ralg}[1]{\autoref{alg:#1}}
+\newcommand{\rthm}[1]{\autoref{thm:#1}}
+\newcommand{\rlem}[1]{\autoref{lem:#1}}
+\newcommand{\reqn}[1]{\autoref{eqn:#1}}
+\newcommand{\rtbl}[1]{\autoref{tbl:#1}}
+
+\algnewcommand\Null{\textsc{null }}
+\algnewcommand\algorithmicinput{\textbf{Input:}}
+\algnewcommand\Input{\item[\algorithmicinput]}
+\algnewcommand\algorithmicoutput{\textbf{Output:}}
+\algnewcommand\Output{\item[\algorithmicoutput]}
+\algnewcommand\algorithmicbreak{\textbf{break}}
+\algnewcommand\Break{\algorithmicbreak}
+\algnewcommand\algorithmiccontinue{\textbf{continue}}
+\algnewcommand\Continue{\algorithmiccontinue}
+\algnewcommand{\LeftCom}[1]{\State $\triangleright$ #1}
+
+\newtheorem{thm}{定理}[section]
+\newtheorem{lem}{引理}[section]
+
+\colorlet{shadecolor}{black!15}
+
+\theoremstyle{definition}
+\newtheorem{alg}{算法}[section]
+
+\def\thmautorefname~#1\null{定理~#1~\null}
+\def\lemautorefname~#1\null{引理~#1~\null}
+\def\algautorefname~#1\null{算法~#1~\null}
+
+\begin{document}
+
+\maketitle
+
+\clearpage
+
+\pagenumbering{Roman}
+
+\tableofcontents[level=2]
+\clearpage
+
+\pagenumbering{arabic}
+
+\section{网页整体框架}
+
+\begin{figure}[htb] % here top bottom
+	\begin{center}
+		\includegraphics[scale=0.25]{旅行日记.png}
+		\caption{网页整体框架}
+		\label{fig1-1}
+	\end{center}
+\end{figure}
+
+网页从我的家乡和我去过的其他地区的旅游景点两个方面讲述了我的观点：是向往家的温暖，还是希望远方的梦想，最后附上联系我的方式。
+
+\newpage
+
+\section{主页设计}
+
+先查看主页整体结构如图\ref{fig2-1}
+
+\begin{figure}[htb]
+	\begin{center}
+		\includegraphics[scale=0.30]{index1.png}
+            \includegraphics[scale=0.60]{index2.png}
+		\caption{主页示例}
+		\label{fig2-1}
+	\end{center}
+\end{figure}
+
+这个网页的主要内容是介绍了自己的家乡和出门旅游，我们每个人都留恋自己的家乡，家乡的好只有自己知道。当然，也有一部分人同样喜欢外出旅游，走出家门看看外面的风景、文化和人情，同样令人陶醉。
+
+网页的名字取为《旅游日记》，调整链接格式如图\ref{fig2-2}所示，首先先将链接颜色改为黑色，然后设置变换图像链接为代码为蓝色，这样当鼠标停留在超链接上就会变色，提升浏览网页的舒适度。
+
+\begin{figure}[htb]
+	\begin{center}
+		\includegraphics[scale=0.80]{index链接.png}
+		\caption{链接属性}
+		\label{fig2-2}
+	\end{center}
+\end{figure}
+
+网页首页的左侧导航栏和上方的导航栏都对应相应内容的网页，并且在网页最先面有返回当前页的顶页的功能，可以帮助阅读者快速回到顶页，执行切换网页的动作。每一章的内容导航栏都插入一张图片，大致的反映了不同地域的风景上的特点，吸引阅读者的阅读兴趣。
+
+\newpage
+
+\section{分页面设计}
+
+接下来几张网页中我将会从巴彦淖尔、内蒙古、北方、南方、外国和联系我六个方面探讨网页制作的过程。
+
+\subsection{巴彦淖尔}
+
+\begin{figure}[htb]
+	\begin{center}
+		\includegraphics[scale=0.60]{bayannaoer1.png}
+            \caption{巴彦淖尔}
+		\label{fig3-1}
+	\end{center}
+\end{figure}
+
+如图\ref{fig3-1}，其中是我的高中母校，总是在几个平平无奇的时间散发出她的无限魅力，让我深深地着迷。
+
+\begin{figure}[htb]
+	\begin{center}
+		\includegraphics[scale=0.60]{bayannaoer2.png}
+            \caption{巴彦淖尔}
+		\label{fig3-2}
+	\end{center}
+\end{figure}
+
+如图\ref{fig3-2}，我拍摄了我的家乡的一些景点，虽然说不是5A级景区，但是在我的心里这里是家的方向，胜似5A级景区。
+
+这张的分页面的主要设计思路延续首页，先在顶部设置导航栏可以链接到其他的章节，在网页最底部依旧有返回顶页的链接。
+
+\begin{figure}[htb]
+	\begin{center}
+		\includegraphics[scale=0.60]{images/巴彦淖尔3.jpg}
+            \caption{巴彦淖尔}
+		\label{fig3-3}
+	\end{center}
+\end{figure}
+
+至于图片的格式和大小如图\ref{fig3-3}，将图片的宽度统一设置为700，这样使图片更加整齐，增加网页可读性。然后将图片交叉显示，更加说明了图片的直观性，使网页阅读起来减少了枯燥乏味之感。并且，图片旁边的文字使用标题1大小，让文字尽可能放大，与图片拟合效果良好。
+
+\newpage
+
+\newpage
+
+\subsection{内蒙古}
+
+\begin{wrapfigure}{l}{0.60\textwidth}
+  \centering
+  \includegraphics[width=0.45\textwidth]{images/内蒙古1.jpg}
+  \includegraphics[width=0.45\textwidth]{images/内蒙古2.jpg}
+  \caption{内蒙古}
+  \label{fig3-4}
+\end{wrapfigure}
+
+分页面2主要介绍了我的家乡所在的省份内蒙古，如图\ref{fig3-4}。内蒙古幅员辽阔，从东到西有2000多公里的距离，所以内蒙古不仅仅有草原，在内蒙古东部以森林草原为主，其中有著名的大兴安岭，旁边就是呼伦贝尔草原，身处其中，每个人都会被这种广阔的景象所吸引；到了内蒙古中部，则变成了荒漠草原，就像网页中的黄花沟和乌兰哈达火山，其实都处于乌兰察布盟境内，但是却是截然不同的风格；再往西到内蒙古西部，则是到了荒漠地带，像鄂尔多斯响沙湾，可以体验冲沙的乐趣，还有阿拉善盟的胡杨林，那首歌曲中三千年不倒的胡杨树就映入眼帘。
+
+页面最上方有导航栏链接其他页面,最末端有返回顶页的链接，方便阅读，将图片交叉显示，更加说明了图片的直观性，使网页阅读起来减少了枯燥乏味之感。整体页面的背景色设置为白色，使网页更加简约大方。
+
+\newpage
+
+\subsection{北方}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.48\linewidth]{北方1.jpg}
+    \includegraphics[width=0.48\linewidth]{北方2.jpg}
+    \caption{北方}
+    \label{fig3-5}
+\end{figure}
+
+分页面3主要介绍了我在北方去过的旅游景点，如图\ref{fig3-5}，网页中第一张图片是我在西安大雁塔旁边的步行街拍摄的，夜幕降临，感受这古典文化和现代都市互相碰撞而擦出的火花。图二是拍摄于黄河的壶口瀑布，黄河流经这里，地势骤降，形成了壮观的瀑布。图三拍摄于华山，陡峭的山峰确实给人无比的震撼。图四是拍摄于河北保定的野三坡，一线天的山石压迫，窒息感扑面而来。图五、图六、图七记录了在北京的旅行生活，作为首都，其历史文化更是辉煌灿烂。图八、图九、图十是在山东拍摄的，济南大明湖畔超然楼，亮灯的那一刻内心无比激动；夜爬泰山，在清晨看到了齐鲁大地的一缕阳光，这何尝又不是一次全新的挑战。在网页下方，有链接到哔站的视频，是和我一同去山东旅游的同学剪辑的，感兴趣的也可以点击观看。
+
+页面最上方有导航栏链接其他页面,最末端有返回顶页的链接，方便阅读，将图片交叉显示，更加说明了图片的直观性，使网页阅读起来减少了枯燥乏味之感。整体页面的背景色设置为白色，使网页更加简约大方。
+
+\newpage
+
+\subsection{南方}
+
+\begin{wrapfigure}{r}{0.50\textwidth}
+  \centering
+  \includegraphics[width=0.48\textwidth]{南方1.jpg}
+  \includegraphics[width=0.48\textwidth]{南方2.jpg}
+  \caption{南方}
+  \label{fig3-6}
+\end{wrapfigure}
+
+分页面4主要介绍了我在南方的旅游记录。如图\ref{fig3-6}图一图二分别是南京的夫子庙和中山陵，作为历史文化名城，南京散发出它特有的文化气息和对历史的包容。图三是扬州的瘦西湖，诗句中“烟花三月下扬州”表明了三月扬州的美丽，虽然我去的季节并不是三月，但是扬州的美和干净依旧给我留下了很深的印象。图四是苏州的拙政园，图五是杭州西湖，上有天堂，下有苏杭，果然，南方小桥流水似的景象确实不同于北方，也是来自北方的我格外喜欢。图六是上海东方明珠，这座中国经济中心，上海用它的方式向全世界宣扬着它在世界上不容小觑的力量。图七是长沙的橘子洲，硕大的毛泽东像屹立于岛上，这片红色土地上，诞生了多少红色革命的英雄。图八，喻家山下的我们，在这里扬帆起航，迈向更远的未来。
+
+页面最上方有导航栏链接其他页面,最末端有返回顶页的链接，方便阅读，将图片交叉显示，更加说明了图片的直观性，使网页阅读起来减少了枯燥乏味之感。整体页面的背景色设置为白色，使网页更加简约大方。
+
+\newpage
+
+\subsection{外国}
+
+\begin{wrapfigure}{l}{0.60\textwidth}
+  \centering
+  \includegraphics[width=0.5\textwidth]{外国1.png}
+  \includegraphics[width=0.5\textwidth]{外国2.png}
+  \caption{外国}
+  \label{fig3-7}
+\end{wrapfigure}
+
+分页面5主要介绍了我在外国的旅游经历，如图\ref{fig3-7}。我只去过阿联酋，在这里我只讲述我在阿联酋旅游时的所见所闻。图一是迪拜的亚特兰蒂斯酒店，据说全球只有三家，其中间的大桃子真的很可爱的。图二，随手拍了一张阿联酋的汽车，毕竟这是一个水比油贵的沙漠石油国家，豪车的性价比要比国内高不少。图三是波斯湾附近的朱美拉沙滩，
+
+这片海下面蕴藏了多少石油，使波斯湾沿岸的国家为了石油而战争，使中东地区一直都是社会动荡的热点地区。图四是谢赫扎伊德大清真寺，这里的人信奉伊斯兰教，这种清真寺在当地遍地都是。图五是阿布扎比国会大厦，傲然矗立，笔直雄壮，代表着阿联酋的经济盛状。图七是阿布扎比皇宫酒店，把奢华和豪横发挥到了极致。在外国的领域，我真真切切感受到不同于中国的文化，一方水土养一方人，在这个小国家，人人脸上有着对生命的重视和希望。
+
+页面最上方有导航栏链接其他页面,最末端有返回顶页的链接，方便阅读，将图片交叉显示，更加说明了图片的直观性，使网页阅读起来减少了枯燥乏味之感。整体页面的背景色设置为白色，使网页更加简约大方。
+
+\subsection{联系我}
+
+分页面6是一个联系页面，阅读者可以将想要留言的内容告诉我，下面备注了我的住宿地址，QQ号和QQ邮箱。
+
+\begin{figure}[h]
+	\begin{center}
+		\includegraphics[scale=0.45]{联系我.png}
+            \caption{联系我}
+		\label{fig3-8}
+	\end{center}
+\end{figure}
+
+\begin{figure}[h]
+	\begin{center}
+            \includegraphics[scale=0.40]{文本域位置.png}
+            \caption{文本域位置}
+		\label{fig3-9}
+	\end{center}
+\end{figure}
+
+\begin{figure}[h]
+	\begin{center}
+            \includegraphics[scale=0.40]{文本域设置.png}
+            \caption{文本域设置}
+		\label{fig3-10}
+	\end{center}
+\end{figure}
+
+如图\ref{fig3-9}，首先需要在上方菜单栏中找到“插入”——“表单”——“文本域”插入文本域，然后如图\ref{fig3-10}，设置文本域的标签，依次填入姓名、邮箱、电话号、请提出您的宝贵意见，样式设置为“用标签标记环绕”，位置设置为“在表单项前”点击确定。
+
+最后插入一个有框架的按钮，设置标签为虚拟的发送键。联系界面就做好了。
+
+\section{网页设计小结}
+
+一开始使用DW做网页的时候，首先学习建立一个新的站点，然后建立一张新的网页，首先先查看了讲课的PPT，了解了DW最基础的知识之后，开始真正使用DW做网页的时候又遇到了许多新的问题，例如响应式设计问题：在不同设备上，网页的布局和内容应该有所不同；浏览器兼容性问题：不同浏览器对CSS和JavaScript的支持存在差异；图片优化问题：大图会导致网页加载速度变慢。用户体验问题：网页的用户体验对用户留存和转化率有很大影响。
+
+解决方法：使用合适的颜色、字体和布局，以及增加交互和动画效果来提高用户体验。针对这些问题，一般会上网搜索答案相应的解决方案，然后基于次解决方案，结合实际的情况，进行适当的改造，使网页的内容符合我所需要的题材。最后，在比较熟练的掌握了DW的一些基础内容的时候，做一些网页和细节部分就游刃有余了。
+
+\newpage
+
+\section{课程的收获和建议}
+
+通过学习新生实践课系列课程，让初入大学的我对计算机这一专业和领域需要掌握什么知识点有了一个比较明确的看法。我们不能只是学习C语言这一门专业课，应该从更多的地方入手，体验更多更充实的技能。我希望，可以减少计算机基础知识的讲解时间和内容，增加能提升实际能力的课程。
+
+\subsection{计算机基础知识}
+
+通过计算机基础知识这门课程，我了解了计算机的基本结构和一些专有名词，懂得了计算机能运行起来的道理，熟悉了计算机各个部件的作用；同时，我了解了计算机发展的历史，并且领会到如今我们如此发达的计算机网络技术是前辈科学家们一步一个脚印走出来的。我希望可以减少计算机历史的介绍，这段历史并不能帮助我们真正意义上获得一些能力和提升。
+
+\subsection{文档撰写工具LaTeX}
+
+作为一款强大的排版工具，LaTeX 让同学们制作出高质量、专业的文档。通过学习 LaTeX，使排版效果更加专业，制作出高质量、专业的文档，包括论文、报告、简历等。LaTeX 是数学公式排版的首选工具，它支持各种数学符号和公式排版，可以更加方便地制作数学文档。
+通过使用 LaTeX，可以轻松地控制文档的排版效果，包括字体、字号、段落间距等。对于学习 LaTeX 的建议，我认为可以适当减少一些基础知识的讲解时间，例如LaTeX 的基本语法、命令等，这些内容可以通过自学和实践来掌握。而在讲授内容方面，可以增加一些实用的技巧和工具的介绍，例如如何使用 LaTeX 制作幻灯片、如何使用 LaTeX 制作海报等。
+
+\subsection{编程工具Python}
+
+例如，再学习C语言的同时，我也学会了最基础的Python的语法，可以编写一些简单的Python代码。学习编程工具Python可以给我带来许多收获。例如，掌握一种流行的编程语言，能够进行数据分析、机器学习、Web开发等多种应用；增强了问题解决能力和逻辑思维，培养了编程思维。能够编写简洁、高效的代码，提高了解决问题的能力。建议减少对于基础语法的讲解，因为这些内容在其他编程语言中也是通用的；可以增加对Python在数据分析、机器学习、Web开发等领域的应用讲解，以及实际项目的实践时间。
+
+\subsection{图像设计软件Photoshop}
+
+学习图像设计软件 Photoshop 可以带来许多收获，可以帮助我掌握图像处理的技能，包括修图、合成、调色等方面的技术，可以学会如何利用各种工具和功能来实现自己的创意设计，包括海报设计、插画制作等。建议增加一些PS的课程，毕竟现在的短视频和摄影行业无处不需要用到PS。
+
+\subsection{版本管理软件Git}
+
+
+Git是一个强大的版本控制系统，它可以帮助团队协作开发，并追踪代码的变化。学习如何使用Git有助于更好地管理代码版本，并提高团队协作效率；掌握分支管理是Git中的重要概念，它能够帮助团队在不影响主要代码流的情况下进行并行开发；学会使用Git可以轻松地回滚到以前的稳定状态，从而避免不必要的错误；通过Git，团队可以更轻松地进行代码审查，确保代码质量和一致性。建议：对于基础的Git命令，可以减少讲授时间，因为这些命令相对简单，可以通过实际操作来更好地理解；深入讲解分支管理、合并冲突解决、高级的Git工作流等内容可以增加讲授时间，因为这些内容对于团队协作和复杂项目的管理至关重要。
+
+\subsection{网页制作Dreamweaver}
+
+通过学习DW，我掌握了基本的网页制作技能，包括HTML、CSS和可能的JavaScript；了解了Dreamweaver工具的使用，包括布局设计、代码编辑和预览功能；获得了实际项目经验，可能会创建自己的网页或者简单的网站；对网页制作流程和最佳实践有了更深入的理解。
+建议：对于Dreamweaver工具的基本操作，可以简化并加快讲授速度，因为这些在实践中可以通过自学和探索来掌握；在HTML、CSS和响应式设计等方面进行更深入的讲解，因为这些是网页制作的核心内容，对学习者更有实际意义。
+
+
+\nocite{*} %% 作用是不对文献进行引用，但可以生成文献列表
+
+%\bibliographystyle{HustGraduPaper}
+%\bibliography{HustGraduPaper}
+
+\end{document}

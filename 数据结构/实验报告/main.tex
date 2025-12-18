@@ -1,0 +1,3223 @@
+\documentclass[supercite]{Experimental_Report}
+
+\title{~~~~~~C语言程序设计~~~~~~}
+\author{贾柠泽}
+\school{计算机科学与技术学院}
+\classnum{CS2306}
+\stunum{U202315594}
+\instructor{周全}
+\date{\today}
+
+\usepackage{algorithm, multirow}
+\usepackage{algpseudocode}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{framed}
+\usepackage{mathtools}
+\usepackage{subcaption}
+\usepackage{xltxtra} %提供了针对XeTeX的改进并且加入了XeTeX的LOGO, 自动调用xunicode宏包(提供Unicode字符宏)
+\usepackage{bm}
+\usepackage{tikz}
+\usepackage{tikzscale}
+\usepackage{pgfplots} %用于绘制高质量图形
+\usepackage{graphicx} %用于在文档中插入和管理图片
+\usepackage{wrapfig} %将文字环绕在图片或表格周围
+\usepackage{listings} %可以插入源代码
+%\usepackage{enumerate}
+
+\pgfplotsset{compat=1.16}
+
+\geometry{left=2.5cm,bottom=2cm,top=3cm,right=2.5cm}
+
+\newcommand{\cfig}[3]{
+  \begin{figure}[htb]
+    \centering
+    \includegraphics[width=#2\textwidth]{images/#1.tikz}
+    \caption{#3}
+    \label{fig:#1}
+  \end{figure}
+}
+
+\newcommand{\sfig}[3]{
+  \begin{subfigure}[b]{#2\textwidth}
+    \includegraphics[width=\textwidth]{images/#1.tikz}
+    \caption{#3}
+    \label{fig:#1}
+  \end{subfigure}
+}
+
+\newcommand{\xfig}[3]{
+  \begin{figure}[htb]
+    \centering
+    #3
+    \caption{#2}
+    \label{fig:#1}
+  \end{figure}
+}
+
+\newcommand{\rfig}[1]{\autoref{fig:#1}}
+\newcommand{\ralg}[1]{\autoref{alg:#1}}
+\newcommand{\rthm}[1]{\autoref{thm:#1}}
+\newcommand{\rlem}[1]{\autoref{lem:#1}}
+\newcommand{\reqn}[1]{\autoref{eqn:#1}}
+\newcommand{\rtbl}[1]{\autoref{tbl:#1}}
+
+\algnewcommand\Null{\textsc{null }}
+\algnewcommand\algorithmicinput{\textbf{Input:}}
+\algnewcommand\Input{\item[\algorithmicinput]}
+\algnewcommand\algorithmicoutput{\textbf{Output:}}
+\algnewcommand\Output{\item[\algorithmicoutput]}
+\algnewcommand\algorithmicbreak{\textbf{break}}
+\algnewcommand\Break{\algorithmicbreak}
+\algnewcommand\algorithmiccontinue{\textbf{continue}}
+\algnewcommand\Continue{\algorithmiccontinue}
+\algnewcommand{\LeftCom}[1]{\State $\triangleright$ #1}
+
+\newtheorem{thm}{定理}[section]
+\newtheorem{lem}{引理}[section]
+
+\colorlet{shadecolor}{black!15}
+
+\theoremstyle{definition}
+\newtheorem{alg}{算法}[section]
+
+\def\thmautorefname~#1\null{定理~#1~\null}
+\def\lemautorefname~#1\null{引理~#1~\null}
+\def\algautorefname~#1\null{算法~#1~\null}
+
+\begin{document}
+
+\maketitle
+
+\clearpage
+
+\pagenumbering{Roman}
+
+\tableofcontents[level=2]
+\clearpage
+
+\pagenumbering{arabic}
+
+\section{基于链式存储结构的线性表实现}
+
+\subsection{问题描述}
+
+链式线性表具有前一实验中顺序线性表的多数特点，比如其数据元素在逻辑位置上相邻。与其不同的是，链式线性表在物理存储中并不相邻。
+
+链式表分为单链表，循环链表和双向链表。链表可能会设置为空的头结点便于操作，也可能设置尾指针。
+
+本实验的目的是制作一个有空头结点的单链表，并对其能够实现进行一些基本和进阶操作。
+    
+\subsection{系统设计}
+
+链式线性表中数据元素的物理位置分开存储，这就要求使用指针来实现。对
+应每个数据节点，需要增加一个指向下一节点的指针，即指针域，用于串联整个
+线性表。因此，链式线性表的结构声明如下：
+
+\begin{lstlisting}
+typedef struct LNode { //单链表（链式结构）结点的定义
+	ElemType data;
+	struct LNode *next;
+} LNode, *LinkList;
+
+typedef struct LIST{ // 多链表的管理表定义
+    struct { 
+        char name[30];
+        LinkList L;
+    } elem[10];
+    int length ;
+    int listsize ;
+}LISTS;
+\end{lstlisting}
+
+\subsection{系统实现}
+
+\subsubsection{线性表的创建}
+
+函数名称：InitList(\&L)
+
+初始条件：线性表L不存在
+
+操作结果：构造一个空的线性表
+
+\begin{figure}[htb]
+	\begin{center}
+		\includegraphics[scale=1]{1-1.png}
+		\caption{线性表的创建}
+	\end{center}
+\end{figure}
+
+\subsubsection{线性表的销毁}
+
+函数名称：DestroyList(\&L)
+
+初始条件：线性表L已存在
+
+操作结果：删除线性表
+
+\subsubsection{清空线性表}
+
+函数名称：ClearList(\&L)
+
+初始条件：线性表L已存在
+
+操作结果：将L重置为空表
+
+\begin{figure}[htb]
+	\begin{center}
+		\includegraphics[scale=1]{1-2.png}
+		\caption{清空线性表之后的结果}
+	\end{center}
+\end{figure}
+
+\subsubsection{线性表判空}
+
+函数名称：ListEmpty( L)
+
+初始条件：线性表L已存在
+
+操作结果：若L为空表，返回OK，否则返回ERROR
+
+\begin{figure}[htb]
+	\begin{center}
+		\includegraphics[scale=1]{1-2.png}
+		\caption{线性表为空}
+	\end{center}
+\end{figure}
+
+\begin{figure}[htb]
+	\begin{center}
+		\includegraphics[scale=1]{1-3.png}
+		\caption{线性表不为空}
+	\end{center}
+\end{figure}
+
+\subsubsection{求线性表长度}
+
+函数名称：ListLength(L)
+
+初始条件：线性表L已存在
+
+操作结果：返回L中数据元素的个数
+
+\begin{figure}[htb]
+	\begin{center}
+		\includegraphics[scale=0.7]{1-6.png}
+		\caption{求线性表长度}
+	\end{center}
+\end{figure}
+
+\subsubsection{获取元素}
+
+函数名称：GetElem(L,i,\&e)
+
+初始条件：线性表L已存在，1<=i<=ListLength(L)
+
+操作结果：用e返回L中的第i个元素的值
+
+\begin{figure}[htb]
+	\begin{center}
+		\includegraphics[scale=0.5]{1-5.png}
+		\caption{获取i位置的元素e}
+	\end{center}
+\end{figure}
+
+\newpage
+
+\subsubsection{查找元素}
+
+函数名称：LocateElem(L,e)
+
+初始条件：线性表L已存在
+
+操作结果：返回e的结点位置
+
+\begin{figure}[htb]
+	\begin{center}
+		\includegraphics[scale=0.7]{1-4.png}
+		\caption{查找元素e}
+	\end{center}
+\end{figure}
+
+\subsubsection{获取前驱元素}
+
+函数名称：PriorElem(L,e,\&pre)
+
+初始条件：线性表L已存在
+
+操作结果：获取线性表L中元素e的前驱，保存在pre中，返回OK；如果没有前驱，返回ERROR
+
+\begin{figure}[htb]
+	\begin{center}
+		\includegraphics[scale=0.7]{1-7.png}
+		\caption{获取前驱元素}
+	\end{center}
+\end{figure}
+
+\subsubsection{获取后继元素}
+
+函数名称：NextElem(L,e,\&next)
+
+初始条件：线性表L已存在
+
+操作结果：获取线性表L中元素e的后继，保存在next中，返回OK；如果没有后继，返回ERROR
+
+\begin{figure}[htb]
+	\begin{center}
+		\includegraphics[scale=0.7]{1-8.png}
+		\caption{获取后继元素}
+	\end{center}
+\end{figure}
+
+\subsubsection{插入元素}
+
+函数名称：ListInsert(\&L,i,e)
+
+初始条件：线性表L已存在，1<=i<=ListLength(L)+1
+
+操作结果：在L中第i个位置之前插入新的元素数据e，L的长度+1
+
+\begin{figure}[htb]
+	\begin{center}
+		\includegraphics[scale=0.5]{1-9.png}
+		\caption{插入e前}
+	\end{center}
+\end{figure}
+
+\begin{figure}[htb]
+	\begin{center}
+		\includegraphics[scale=0.5]{1-10.png}
+		\caption{插入e后}
+	\end{center}
+\end{figure}
+
+\subsubsection{删除元素}
+
+函数名称：ListDelete(\&L,i,\&e)
+
+初始条件：线性表L已存在且非空，1<=i<=ListLength(L)
+
+操作结果：删除L中第i个数据元素，用e返回其值，L的长度-1
+
+\begin{figure}[htb]
+	\begin{center}
+		\includegraphics[scale=0.5]{1-11.png}
+		\caption{删除e前}
+	\end{center}
+\end{figure}
+
+\begin{figure}[htb]
+	\begin{center}
+		\includegraphics[scale=0.5]{1-12.png}
+		\caption{删除e后}
+	\end{center}
+\end{figure}
+
+\subsubsection{遍历线性表}
+
+函数名称：ListTraverse(L)
+
+初始条件：线性表L已存在
+
+操作结果：依次访问L中的每个元素
+
+\subsection{系统测试}
+
+本章使用的具有菜单的功能演示系统如图\ref{1-13}
+
+\begin{figure}[htb]
+	\begin{center}
+		\includegraphics[scale=0.8]{1-13.png}
+		\caption{演示系统}
+        \label{1-13}
+	\end{center}
+\end{figure}
+
+当用功能1第一次创建线性表时会显示创建成功。
+
+用功能10依次插入5、9、7、6、8，我们以7为例子，输出插入成功。
+
+用功能12遍历链表，输出5 9 7 6 8。
+
+用功能5求一下链表长度，答案是5。
+
+用功能7获取元素6的位置，得到位置是4。
+
+用功能6获取第3个位置的元素，得到元素7。
+
+用功能8获取9的前驱元素，得到元素5。
+
+用功能9获取9的后继元素，得到元素7。
+
+用功能11删除第4个元素，输出删除成功，并再次用功能12遍历链表。
+
+用功能4判空，结果为不为空。
+
+用功能3清空线性表，并求链表长度，结果为0。
+
+用功能2销毁线性表，销毁成功。
+
+最后输入0，退出演示系统。
+
+\begin{figure}
+	\begin{center}
+            \includegraphics[scale=1]{1-14.png}
+            \includegraphics[scale=1]{1-15.png}
+            \includegraphics[scale=1]{1-16.png}
+            \includegraphics[scale=1.2]{1-17.png}
+            \includegraphics[scale=1]{1-18.png}
+            \includegraphics[scale=1]{1-19.png}
+        \caption{系统测试}
+        \label{1-14}
+	\end{center}
+\end{figure}
+
+\begin{figure}
+	\begin{center}
+            \includegraphics[scale=1]{1-20.png}
+		\includegraphics[scale=1]{1-21.png}
+            \includegraphics[scale=1]{1-22.png}	
+            \includegraphics[scale=1]{1-23.png}
+            \includegraphics[scale=1]{1-24.png}
+            \includegraphics[scale=1]{1-25.png}
+            \includegraphics[scale=1]{1-26.png}
+            \includegraphics[scale=1]{1-27.png}
+            \includegraphics[scale=1]{1-28.png}
+        \caption{系统测试}
+        \label{1-14}
+	\end{center}
+\end{figure}
+
+\newpage
+
+\subsection{实验小结}
+
+在链表的实验中，我学到了很多与链表数据结构相关的知识，也提升了自己的编程能力和问题解决能力。以下是我对链表实验的小结：
+
+1.理解了链表的原理和特点：通过实验，我深入理解了链表的定义、结构和操作方式，包括单链表、双向链表等不同类型的链表，以及链表的优缺点。
+
+2.实现了链表的基本操作：在实验过程中，我编写了链表的插入、删除、查找等基本操作的代码，加深了对链表操作的理解和掌握。
+
+3.解决了链表相关问题：在实验过程中，我遇到了一些链表相关的问题，如反转链表、检测链表是否有环等，通过实践和调试，我提升了自己对链表问题的解决能力。
+
+4.熟悉了链表的应用场景：链表在实际项目中有广泛的应用，如实现队列、栈、LRU缓存等数据结构，通过实验，我了解了链表在实际项目中的应用场景。
+
+5.编程技能得到提升：通过实验的编程实践，我熟练掌握了链表的实现和操作方法，提升了自己的数据结构和算法编程能力。
+
+总的来说，通过链表实验，我不仅学到了关于链表的知识和算法，还提升了编程能力和解决问题的能力，这对我今后在计算机科学领域的学习和发展都有很大帮助。
+
+\section{基于二叉链表的二叉树实现}
+
+\subsection{问题描述}
+
+二叉树（binary tree）是指树中节点的度不大于2的有序树，它是一种最简单且最重要的树。
+
+二叉树的递归定义为：二叉树是一棵空树，或者是一棵由一个根节点和两棵互不相交的，分别称作根的左子树和右子树组成的非空树；左子树和右子树又同样都是二叉树。
+
+二叉树（Binarytree）是树形结构的一个重要类型。许多实际问题抽象出来的数据结构往往是二叉树形式，即使是一般的树也能简单地转换为二叉树，而且二叉树的存储结构及其算法都较为简单，因此二叉树显得特别重要。二叉树特点是每个节点最多只能有两棵子树，且有左右之分。
+
+二叉树是n个有限元素的集合，该集合或者为空、或者由一个称为根的元素及两个不相交的、被分别称为左子树和右子树的二叉树组成，是有序树。当集合为空时，称该二叉树为空二叉树。在二叉树中，一个元素也称作一个结点。
+
+1. 结点：包含一个数据元素及若干指向子树分支的信息
+
+2. 结点的度：一个节点拥有子树的数目称为结点的度
+
+3. 叶子结点：也称为终端结点，没有子树的结点或者度为零的结点
+
+4. 分支结点：也称为非终端结点，度不为零的结点称为非终端结点
+
+5. 树的度：树中所有结点的度的最大值
+
+6. 结点的层次：从根结点开始，假设根结点为第1层，根结点的子结点为第2层，依此类推，如果某一个结点位于第L层，则其子结点位于第L+1层
+
+7. 树的深度：也称为树的高度，树中所有结点的层次最大值称为树的深度
+
+8. 有序树：如果树中各棵子树的次序是有先后次序，则称该树为有序树
+
+9. 无序树：如果树中各棵子树的次序没有先后次序，则称该树为无序树
+
+10. 森林：由m（m≥0）棵互不相交的树构成一片森林。如果把一棵非空的树的根结点删除，则该树就变成了一片森林，森林中的树由原来根结点的各棵子树构成
+
+\subsection{系统设计}
+
+二叉树既可以用顺序表按层存储，也可以用二叉链表存储。本次实验中，将二叉树用二叉链表实现。将每个结点设置两个指针域，分别指向其左右孩子，即可将每个结点连接起来。最后给出根结点的指针。
+\begin{lstlisting}
+typedef struct {  //二叉树结点类型定义
+	KeyType key;
+	char others[20];
+}TElemType;
+typedef struct BiTNode { //二叉链表结点的定义
+	TElemType data;
+	struct BiTNode *lchild, *rchild;
+}BiTNode,*BiTree;
+
+typedef struct moretrees{ //多二叉树的管理表定义
+    struct { 
+        char name[30];
+        BiTree T;
+    } elem[10];
+    int length ;
+}BiTrees;
+
+int front=0, rear=0;
+
+void EnQueue(BiTree *a ,BiTree node){ //入队函数
+    a[rear++]=node;
+}
+
+BiTNode* DeQueue(BiTNode **a){ //出队函数
+    return a[front++];
+}
+
+void visit(BiTree T) { //二叉树访问
+    printf("%d,%s ", T->data.key, T->data.others);
+}
+\end{lstlisting}
+
+\subsection{系统实现}
+
+\subsubsection{创建二叉树}
+
+函数名称：CreateBiTree(\&T,definition[],begin) {
+
+初始条件：二叉树已存在
+
+操作结果：按definition构造二叉树T
+
+实现思想：首先判断在definition中是否有相同的关键字，若出现相同直接返回ERROR；采用静态变量k防止递归过程中k的值重新定义。递归创建二叉树的思路是先创建根结点，然后递归创建左子树和右子树。当definition.key=0时，则表示该插入的结点是空结点，definition.key=-1时表示插入结束，begin的作用是判断是否是头结点。
+
+\subsubsection{销毁二叉树}
+
+函数名称：DestroyBiTree(\&T)
+
+初始条件：二叉树T已存在
+
+操作结果：销毁二叉树T
+
+实现思想：采用递归的思想，依次遍历左右子树，先后释放孩子结点以及根结点的空间。
+
+\subsubsection{清空二叉树}
+
+函数名称：ClearBiTree(\&T)
+
+初始条件：二叉树T已存在
+
+操作结果：将二叉树T清空为空树
+
+实现思想：将各个结点之间的父子关系删去，及将左右孩子指针指向空。
+
+\subsubsection{二叉树判空}
+
+函数名称：BiTreeEmpty(T)
+
+初始条件：二叉树T已存在
+
+操作结果：若T为空二叉树，则返回OK，否则返回ERROR
+
+实现思想：直接判断头结点是否为空。
+
+\subsubsection{求二叉树深度}
+
+函数名称：BiTreeDepth(T)
+
+初始条件：二叉树T已存在
+
+操作结果：返回T的深度
+
+实现思想：采用递归的思想，每进行一次递归，就将答案+1，比较左右两边子树的深度，返回深度更大的子树。
+
+\subsubsection{查找结点}
+
+函数名称：LocateNode(T,e)
+
+初始条件：二叉树T已存在，e是T中某个结点关键字
+
+操作结果：返回该结点指针
+
+实现思想：采用递归地思想，依次比较结点的关键字和e的值，相同则返回该结点指针，不相同则继续向下寻找，直到到了空结点。如果左边答案指针leftResult不为空则返回leftResult，否则返回rightResult。
+
+\subsubsection{查找父结点}
+
+函数名称：LocateParent(T,e,k)
+
+初始条件：二叉树T已存在，e是T中某个结点关键字
+
+操作结果：返回父结点指针
+
+实现思想：首先用LocateNode函数找到结点e，然后采用递归的思想依次从头结点向下寻找，直到Node结点的孩子是e结点，则返回Node结点并一步步退出递归，如图\ref{2-6}。若到空结点则返回NULL。
+
+\begin{figure}[htb]
+	\begin{center}
+		\includegraphics[scale=0.5]{2-6.png}
+		\caption{退出递归操作}
+            \label{2-6}
+	\end{center}
+\end{figure}
+
+\subsubsection{获得兄弟结点}
+
+函数名称：LocateBrother(T,e)
+
+初始条件：二叉树T已存在，e是T中某个结点关键字
+
+操作结果：返回值为兄弟结点的指针
+
+实现思想：有了前两个函数的支撑，该函数就迎刃而解。依次找到结点e以及父结点Parent，返回不等于e的另一个孩子结点指针。
+
+\subsubsection{求结点深度}
+
+函数名称：NodeDepth(T,e)
+
+初始条件：二叉树T已存在，e是T中某个结点关键字
+
+操作结果：返回Node结点的深度
+
+实现思想：用LocateNode结点找到e，然后循环调用LocateParent，并记录次数，直到找到头结点为止。
+
+\subsubsection{判断是否重复}
+
+函数名称：UnExistNode(T,value)
+
+初始条件：二叉树已存在
+
+操作结果：若value在T中存在，则返回ERROR，否则返回OK
+
+实验思想：这里用到了ans的乘法，如图\ref{2-4}，只要出现依次关键字重复的情况，ans就=0，导致赋值失败。
+
+\begin{figure}[htb]
+	\begin{center}
+		\includegraphics[scale=0.5]{2-4.png}
+		\caption{ans的赋值操作}
+            \label{2-4}
+	\end{center}
+\end{figure}
+
+\subsubsection{结点赋值}
+
+函数名称：Assign(\&T,e,value)
+
+初始条件：二叉树T已存在，e是某个结点关键字，value的关键字与T不重复
+
+操作结果：用value代替e的结点数据
+
+实现思想：在最外层递归下调用函数LocateNode找到结点e，然后调用函数UnExistNode判断value关键字与T是否重复，依次退出递归，在最外层递归函数中完成赋值操作，如图\ref{2-5}。
+
+\begin{figure}[htb]
+	\begin{center}
+		\includegraphics[scale=0.7]{2-5.png}
+		\caption{最外层函数赋值}
+            \label{2-5}
+	\end{center}
+\end{figure}
+
+\subsubsection{插入结点}
+
+函数名称：InsertNode(\&T,e,LR,c)
+
+初始条件：二叉树T已存在，e是T中某个结点关键字，c中的关键字与T不重复
+
+操作结果：LR为0或1，插入c为e的左子树或右子树，e原有的左子树或右子树变为c的右子树
+
+实验思想：LR=-1即在头结点插入新结点，比较简单。若LR=0或1，首先找到e结点，然后根据LR的值进行插入，如图\ref{2-7}。
+
+\begin{figure}[htb]
+	\begin{center}
+		\includegraphics[scale=0.7]{2-7.png}
+		\caption{LR讨论}
+            \label{2-7}
+	\end{center}
+\end{figure}
+
+\subsubsection{删除结点}
+
+函数名称：DeleteNode(\&T,e,k)
+
+初始条件：二叉树T已存在，e是T中某个结点关键字
+
+操作结果：e是叶子结点，直接删除；只有左子树或右子树，用其左子树或右子树代替e的位置；既有左子树又有右子树，将左子树代替e，右子树插入到左子树的最右结点的右子树
+
+实现思想：当e是头结点时，可以看作递归自己，然后和其他结点的情况合并到下面进行操作，如图\ref{2-8}。
+
+\begin{figure}[htb]
+	\begin{center}
+		\includegraphics[scale=0.6]{2-8.png}
+		\caption{e为头结点递归自己}
+            \label{2-8}
+	\end{center}
+\end{figure}
+
+当e没有孩子时，直接释放e空间并返回2；
+
+若e左右孩子都存在时，先将指向e的指针T指向e最右结点，然后返回3；
+
+若e只有右孩子，则返回4；
+
+若e只有左孩子，次情况可等同于最有结点，所以返回3。
+
+退出最内层递归后，T指向的是e的父结点。
+
+对于返回2的情况，我们只需将指向e的指针指向空；
+
+对于返回3的情况，需要将T的左子树变成e的左子树，再释放e的空间；
+
+对于返回4的情况，需要将T的左子树变成e的右子树，再释放e的空间；
+
+对于返回OK的情况，说明已经完成了释放空间的操作，只需要一步步退出递归，返回值为OK。
+
+图\ref{2-9}只是描述了e是T的左孩子的情况，e是右孩子的情况同上。
+
+\begin{figure}[htb]
+	\begin{center}
+		\includegraphics[scale=0.5]{2-9.png}
+            \includegraphics[scale=0.6]{2-10.png}
+		\caption{对不同情况需要进行的操作}
+            \label{2-9}
+	\end{center}
+\end{figure}
+
+\subsubsection{前序遍历}
+
+函数名称：PreOrderTraverse(T)
+
+初始条件：二叉树T已存在
+
+操作结果：先序遍历二叉树T
+
+实现思想：先调用访问函数visit，再依次对左、右孩子进行递归调用。
+
+\subsubsection{中序遍历}
+
+函数名称：InOrderTraverse(T)
+
+初始条件：二叉树T已存在
+
+操作结果：中序遍历二叉树T
+
+实现思想：先对左孩子进行递归调用，然后调用访问函数visit、最后右孩子进行递归调用。
+
+\subsubsection{后序遍历}
+
+函数名称：PostOrderTraverse(T)
+
+初始条件：二叉树T已存在
+
+操作结果：后序遍历二叉树T
+
+实现思想：先依次对左、右孩子进行递归调用，再调用访问函数visit。
+
+\subsubsection{层序遍历}
+
+函数名称：LevelOrderTraverse(T)
+
+初始条件：二叉树T已存在
+
+操作结果：层序遍历二叉树T
+
+实现思想：需要定义一个先进先出的队列，依次从前到后访问结点，每访问一个结点就将左右孩子加入到队列中，然后根结点出队列。
+
+\subsection{系统测试}
+
+二叉树的演示系统如图\ref{2-12}，二叉树的创建如下，在这个系统测试中我们默认使用如图\ref{2-2}的二叉树。
+
+\begin{figure}[htb]
+	\begin{center}
+		\includegraphics[scale=0.7]{2-12.png}
+		\caption{演示系统}
+            \label{2-12}
+	\end{center}
+\end{figure}
+
+\begin{figure}[htb]
+	\begin{center}
+            \includegraphics[scale=0.7]{2-1.png}
+		\includegraphics[scale=0.7]{2-2.png}
+		\caption{按definition创建的二叉树}
+            \label{2-2}
+	\end{center}
+\end{figure}
+
+用功能1创建该二叉树，创建成功。
+
+用功能16查找5的父结点，得到3；查找1的父结点则失败。
+
+用功能8获取5的兄弟结点，得到4。
+
+用功能9在3的左孩子插入新的结点6,f，然后用功能14层序遍历，得到1,2,3,6,5,4。
+
+用功能10删除结点3，然后用功能13后序遍历，得到2,5,4,6,1。
+
+用功能15翻转二叉树，然后用功能11先序遍历，得到1,6,4,5,2。
+
+用功能18获得2和6的最近祖先，得到1。
+
+用功能19判断是否为二叉排序树，得到不是排序树。
+
+用功能5求二叉树深度，得到4。
+
+用功能2销毁二叉树，销毁成功。
+
+用功能12中序遍历，什么也没得到。
+
+用功能3清除二叉树，清除失败。
+
+最后输出0，退出演示系统。
+
+\begin{figure}[htb]
+	\begin{center}
+            \includegraphics[scale=0.6]{2-11.png}
+            \includegraphics[scale=1.2]{2-13.png}
+            \includegraphics[scale=1.1]{2-14.png}
+            \includegraphics[scale=1]{2-15.png}
+		\caption{系统测试}
+            \label{2-2}
+	\end{center}
+\end{figure}
+
+\begin{figure}[htb]
+	\begin{center}
+            \includegraphics[scale=1.1]{2-16.png}
+            \includegraphics[scale=1.1]{2-17.png}
+            \includegraphics[scale=1.1]{2-18.png}
+            \includegraphics[scale=1.1]{2-19.png}
+            \includegraphics[scale=1.2]{2-20.png}
+            \includegraphics[scale=1.2]{2-21.png}
+            \includegraphics[scale=1.2]{2-22.png}
+            \includegraphics[scale=1.2]{2-23.png}
+            \includegraphics[scale=1.1]{2-24.png}
+            \includegraphics[scale=1.1]{2-25.png}
+            \includegraphics[scale=1.1]{2-26.png}
+		\caption{系统测试}
+            \label{2-2}
+	\end{center}
+\end{figure}
+
+\subsection{实验小结}
+
+在二叉树实验中，我学到了很多关于二叉树数据结构和相关算法的知识，也提升了自己的编程能力和问题解决能力。以下是我对二叉树实验的小结：
+
+1.理解了二叉树的基本概念和性质：通过实验，我深入理解了二叉树的定义、特点以及常见的遍历方式（前序、中序、后序遍历），掌握了二叉树的基本操作。
+
+2.实现了二叉树各种遍历算法：在实验过程中，我编写了二叉树的前序、中序、后序遍历的递归和非递归算法，加深了对这些遍历算法的理解和应用。
+
+3.解决了二叉树相关问题：在实验过程中，我遇到了一些二叉树相关的问题，如查找二叉树的最大深度、判断二叉树是否对称等，通过实践和调试，我提升了自己的问题解决能力。
+
+4.加深了对递归思想的理解：二叉树的遍历算法和一些问题解决方法都涉及到递归思想，通过实验，我进一步理解了递归的原理和应用场景，提高了递归编程的能力。
+
+5.编程技能得到提升：通过实验的编程实践，我熟练掌握了二叉树的实现和操作方法，提升了自己的数据结构和算法编程能力。
+
+总的来说，通过二叉树实验，我不仅学到了关于二叉树的知识和算法，还提升了编程能力和解决问题的能力，这对我今后在计算机科学领域的学习和发展都有很大帮助。
+
+\section*{课程的收获和建议}
+
+收获：
+
+1.理解了不同数据结构的特点和应用场景，如数组、链表、栈、队列、树、图等，能更好地选择合适的数据结构来解决问题。
+
+2.学会了数据结构的基本操作和算法，如插入、删除、查找、排序、遍历等，提高了编程的效率和质量。
+
+3.掌握了常用的数据结构和算法的实现方式，加深了对计算机程序设计的理解和实践能力。
+
+4.增强了问题分析和解决能力，能够更快速地解决实际的编程问题和挑战。
+
+建议：
+
+1.增加实际应用案例：在教学过程中，可以增加一些实际的应用案例，让学生更直观地理解数据结构在实际项目中的应用和重要性。
+
+2.强调算法分析和复杂度：在教学中，可以更加强调算法分析和时间复杂度、空间复杂度的重要性，让学生深刻认识到选择合适的数据结构和算法对程序性能的影响。
+
+3.提供更多编程练习和实践机会：通过更多的编程作业和项目，让学生能够真正动手实践并应用数据结构，加深对知识的理解和掌握。
+
+4.引入新的数据结构和算法：随着科技的发展，新的数据结构和算法不断涌现，可以引入一些新颖的数据结构和算法，激发学生的兴趣，同时也让他们了解最新的技术动态。
+
+5.注重技术实践和项目实践：可以结合实际项目需求，组织一些数据结构的实践项目，让学生能够将所学知识应用到实际项目中，提高他们的实际能力和竞争力。
+
+\newpage
+
+\section{参考文献}
+
+[1] 严蔚敏等.数据结构（C语言版）.清华大学出版社
+
+[2] Larry Nyhoff. ADTs, Data Structures, and Problem Solving with C++.  Second Edition,Calvin College,2005
+
+[3] 殷立峰. Qt C++跨平台图形界面程序设计基础. 清华大学出版社,2014:192～197
+
+[4] 严蔚敏等.数据结构题集（C语言版）.清华大学出版社
+
+\newpage
+
+\nocite{*} %% 作用是不对文献进行引用，但可以生成文献列表
+
+%\bibliographystyle{HustGraduPaper}
+%\bibliography{HustGraduPaper}
+
+\section*{附录A：基于顺序存储结构线性表实现的源程序}
+
+\begin{lstlisting}
+#include <stdio.h>
+#include <malloc.h>
+#include <stdlib.h>
+
+#define TRUE 1
+#define FALSE 0
+#define OK 1
+#define ERROR 0
+#define INFEASIBLE -1
+#define OVERFLOW -2
+
+typedef int status;
+typedef int ElemType; //数据元素类型定义
+
+#define LIST_INIT_SIZE 100
+#define LISTINCREMENT  10
+
+typedef struct { //顺序表（顺序结构）的定义
+	ElemType *elem;
+	int length;
+	int listsize;
+} SqList;
+
+status InitList(SqList &L) {
+	if (L.elem != NULL) {
+		return INFEASIBLE;
+	}
+	L.elem = (ElemType*)malloc(LIST_INIT_SIZE*sizeof(ElemType));
+	L.length = 0;
+	L.listsize = LIST_INIT_SIZE;
+	return OK;
+}
+
+status DestroyList(SqList &L)
+// 如果线性表L存在，销毁线性表L，释放数据元素的空间，
+返回OK，否则返回INFEASIBLE。
+{
+	if (L.elem == NULL) {
+		return INFEASIBLE;
+	}
+	L.elem = NULL;
+	free(L.elem);
+	return OK;
+}
+
+status ClearList(SqList &L)
+// 如果线性表L存在，删除线性表L中的所有元素，
+返回OK，否则返回INFEASIBLE。
+{
+	if (L.elem == NULL) {
+		return INFEASIBLE;
+	}
+	for (int i = 0; i < L.length; i++) {
+		L.elem[i] = 0;
+	}
+	L.length = 0;
+	return OK;
+}
+
+status ListEmpty(SqList L)
+// 如果线性表L存在，判断线性表L是否为空，空就返回TRUE，
+否则返回FALSE；如果线性表L不存在，返回INFEASIBLE。
+{
+	if (L.elem == NULL)
+		return INFEASIBLE;
+	if (L.length == 0)
+		return TRUE;
+	else
+		return FALSE;
+}
+
+status ListLength(SqList L)
+// 如果线性表L存在，返回线性表L的长度，否则返回INFEASIBLE。
+{
+	if (L.elem == NULL)
+		return INFEASIBLE;
+	return L.length;
+}
+
+status GetElem(SqList L, int i, ElemType &e)
+// 如果线性表L存在，获取线性表L的第i个元素，保存在e中，
+返回OK；如果i不合法，返回ERROR；
+如果线性表L不存在，返回INFEASIBLE。
+{
+	if (L.elem == NULL) {
+		return INFEASIBLE;
+	}
+	if (i > L.length || i < 1) {
+		return ERROR;
+	}
+	e = L.elem[i - 1];
+	return OK;
+}
+
+int LocateElem(SqList L, ElemType e)
+// 如果线性表L存在，查找元素e在线性表L中的位置序号并返回该序号；
+如果e不存在，返回0；当线性表L不存在时，返回INFEASIBLE（即-1）。
+{
+	if (L.elem == NULL) {
+		return INFEASIBLE;
+	}
+	for (int i = 1; i <= L.length; i++) {
+		if (e == L.elem[i - 1]) {
+			return i;
+		}
+	}
+	return 0;
+}
+
+status PriorElem(SqList L, ElemType e, ElemType &pre)
+// 如果线性表L存在，获取线性表L中元素e的前驱，保存在pre中，
+返回OK；如果没有前驱，返回ERROR；如果线性表L不存在，返回INFEASIBLE。
+{
+	if (L.elem == NULL) {
+		return INFEASIBLE;
+	}
+	for (int i = 1; i <= L.length; i++) {
+		if (e == L.elem[i - 1]) {
+			if (i == 1)
+				return ERROR;
+			else {
+				pre = L.elem[i - 2];
+				return OK;
+			}
+		}
+	}
+	return ERROR;
+}
+
+status NextElem(SqList L, ElemType e, ElemType &next)
+// 如果线性表L存在，获取线性表L元素e的后继，保存在next中，返回OK；
+如果没有后继，返回ERROR；如果线性表L不存在，返回INFEASIBLE。
+{
+	if (L.elem == NULL) {
+		return INFEASIBLE;
+	}
+	for (int i = 1; i <= L.length; i++) {
+		if (e == L.elem[i - 1]) {
+			if (i == L.length)
+				return ERROR;
+			else {
+				next = L.elem[i];
+				return OK;
+			}
+		}
+	}
+	return ERROR;
+}
+
+status ListInsert(SqList &L, int i, ElemType e)
+// 如果线性表L存在，将元素e插入到线性表L的第i个元素之前，返回OK；
+当插入位置不正确时，返回ERROR；如果线性表L不存在，返回INFEASIBLE。
+{
+	if (L.elem == NULL) {
+		return INFEASIBLE;
+	}
+	if (i < 1 || i > L.length + 1) {
+		return ERROR;
+	}
+	(int *)realloc(L.elem, sizeof(int *) * 11);
+	int x;
+
+	for (int x = L.length; x >= i; x--) {
+		L.elem[x] = L.elem[x - 1];
+	}
+	L.elem[i - 1] = e;
+	L.length++;
+	return OK;
+}
+
+status ListDelete(SqList &L, int i, ElemType &e)
+// 如果线性表L存在，删除线性表L的第i个元素，并保存在e中，返回OK；
+当删除位置不正确时，返回ERROR；如果线性表L不存在，返回INFEASIBLE。
+{
+	if (L.elem == NULL) {
+		return INFEASIBLE;
+	}
+	if (i < 1 || i > L.length) {
+		return ERROR;
+	}
+	e = L.elem[i - 1];
+	for (int x = i - 1; x < L.length - 1; x++) {
+		L.elem[x] = L.elem[x + 1];
+	}
+	L.length--;
+	return OK;
+}
+
+status ListTraverse(SqList L)
+// 如果线性表L存在，依次显示线性表中的元素，每个元素间空一格，返回OK；
+如果线性表L不存在，返回INFEASIBLE。
+{
+	if (L.elem == NULL) {
+		return INFEASIBLE;
+	}
+	printf("遍历线性表：");
+	for (int i = 0; i < L.length; i++) {
+		printf("%d", L.elem[i]);
+		if (i < L.length - 1)
+			printf(" ");
+	}
+	return OK;
+}
+
+status MaxSubArray(SqList L) {
+	if (L.elem == NULL) {
+		return INFEASIBLE;
+	}
+	int sum = 0, result = 0;
+	for (int i = 0; i < L.length; i++) {
+		if (L.elem[i] >= 0) {
+			sum += L.elem[i];
+		} else {
+			if (sum > result) {
+				result = sum;
+			}
+			sum = 0;
+		}
+	}
+	if (sum > result) {
+		result = sum;
+	}
+	return result;
+}
+
+status SubArrayNum(SqList L, int k) {
+	if (L.elem == NULL) {
+		return INFEASIBLE;
+	}
+	int count = 0;
+	for (int i = 0; i < L.length; i++) {
+		int sum = 0;
+		for (int j = i; j < L.length; j++) {
+			sum += L.elem[j];
+			if (sum == k)
+				count++;
+		}
+	}
+	return count;
+}
+
+status sortList(SqList &L) {
+	if (L.elem == NULL) {
+		return INFEASIBLE;
+	}
+	for (int i = 0; i < L.length - 1; i++) {
+		for (int j = i + 1; j < L.length; j++) {
+			if (L.elem[i] > L.elem[j]) {
+				int temp = L.elem[i];
+				L.elem[i] = L.elem[j];
+				L.elem[j] = temp;
+			}
+		}
+	}
+	return OK;
+}
+
+status  SaveList(SqList L, char FileName[])
+// 如果线性表L存在，将线性表L的的元素写到FileName文件中，
+返回OK，否则返回INFEASIBLE。
+{
+	if (L.elem == NULL)
+		return INFEASIBLE;
+	FILE *fp = fopen(FileName, "w");
+	if (fp == NULL) {
+		printf("Error opening file\n");
+		return 1;
+	}
+
+	for (int i = 0; i < L.length; i++) {
+		fprintf(fp, "%d", L.elem[i]);
+		fprintf(fp, " ");
+	}
+	fclose(fp);
+	return OK;
+}
+
+status  LoadList(SqList &L, char FileName[])
+// 如果线性表L不存在，将FileName文件中的数据读入到线性表L中，
+返回OK，否则返回INFEASIBLE。
+{
+	if (L.elem != NULL) {
+		return INFEASIBLE;
+	}
+	L.elem = (ElemType *)malloc(sizeof(ElemType) * L.listsize);
+	FILE *fp = fopen(FileName, "r");
+	if (fp == NULL) {
+		printf("Error opening file\n");
+		return 1;
+	}
+
+	for (int i = 0; i < L.length; i++) {
+		fscanf(fp, "%d", &L.elem[i]);
+	}
+	fclose(fp);
+	return OK;
+}
+
+int main( ) {
+	SqList L;
+	L.elem = NULL;
+	int op = 1;
+	int j;
+	ElemType i, e, pre, next;
+	while (op) {
+	system("cls");
+	printf("\n");
+	printf("    Menu for Linear Table On Sequence Structure \n");
+	printf("----------------------------------------------\n");
+	printf("        1. InitList（线性表的创建）\n");
+	printf("        2. DestroyList（销毁线性表）\n");
+	printf("    	3. ClearList（清空线性表）\n");
+	printf("        4. ListEmpty（线性表判空）\n");
+	printf("    	5. ListLength（求线性表长度）\n");
+	printf("        6. GetElem（获取元素）\n");
+	printf("    	7. LocateElem（查找元素）\n");
+	printf("        8. PriorElem（获取前驱元素）\n");
+	printf("    	9. NextElem（获取后继元素）\n");
+	printf("        10.ListInsert（插入元素）\n");
+	printf("    	11.ListDelete（删除元素）\n");
+	printf("        12.ListTrabverse（遍历线性表）\n");
+	printf("        13.MaxSubArray（获取最大和）\n");
+	printf("        14.SubArrayNum（求和个数）\n");
+	printf("        15.sortList（线性表排序）\n");
+	printf("        0. Exit（退出菜单）\n");
+	printf("----------------------------------------------\n");
+	printf("    请选择你的操作[0~12]:");
+	scanf("%d", &op);		
+        switch (op) {
+	case 1:
+		j = InitList(L);
+		if ( j == OK)
+			printf("线性表创建成功！\n");
+		else
+			printf("线性表创建失败！\n");
+		getchar();
+		getchar();
+		break;
+	case 2:
+		j = DestroyList(L);
+		if ( j == OK)
+			printf("线性表销毁成功！\n");
+		else
+			printf("线性表销毁失败！\n");
+		getchar();
+		getchar();
+		break;
+	case 3:
+		j = ClearList(L);
+		if (j == OK)
+			printf("线性表清空成功！\n");
+		else
+			printf("线性表清空失败！\n");
+		getchar();
+		getchar();
+		break;
+	case 4:
+		j = ListEmpty(L);
+		if (j == TRUE)
+			printf("线性表为空！\n");
+		else if (j == FALSE)
+			printf("线性表不为空！\n");
+		else
+			printf("线性表不存在！\n");
+		getchar();
+		getchar();
+		break;
+	case 5:
+		j = ListLength(L);
+		if ( j == INFEASIBLE)
+			printf("线性表不存在！\n");
+		else
+			printf("线性表长度为%d\n", ListLength(L));
+		getchar();
+		getchar();
+		break;
+		case 6:
+		printf("输入要获取的元素的位置\n");
+		scanf("%d", &i);
+		j = GetElem(L, i, e);
+		if ( j == INFEASIBLE)
+			printf("线性表不存在！\n");
+		else if (j == ERROR)
+			printf("获取元素失败！\n");
+		else
+			printf("链表中第%d个元素是%d\n", i, e);
+		getchar();
+		getchar();
+		break;
+	case 7:
+		printf("请输入要查找的元素\n");
+		scanf("%d", &e);
+		j = LocateElem(L, e);
+		if (j == 0)
+			printf("该元素不存在！\n");
+		else
+			printf("该元素的位置序号是%d\n", j);
+		getchar();
+		getchar();
+		break;
+	case 8:
+		printf("请输入要查找的元素\n");
+		scanf("%d", &e);
+		j = PriorElem(L, e, pre);
+		if (j == ERROR)
+			printf("查找失败，%d为第一个元素或%d不存在！\n",
+                e, e);
+		else
+			printf("%d的前驱元素是%d\n", e, pre);
+		getchar();
+		getchar();
+		break;
+	case 9:
+		printf("请输入要查找的元素\n");
+		scanf("%d", &e);
+		j = NextElem(L, e, next);
+		if (j == ERROR)
+			printf("查找失败，%d为最后一个
+                    元素或%d不存在！\n", e, e);
+		else
+			printf("%d的后继元素是%d\n", e, next);
+		getchar();
+		getchar();
+		break;
+	case 10:
+		printf("输入要插入的元素的位置以及元素值\n");
+		scanf("%d %d", &i, &e);
+		j = ListInsert(L, i, e);
+		if (j == OK)
+			printf("插入成功！\n");
+		else
+			printf("插入失败！\n");
+		getchar();
+		getchar();
+		break;
+	case 11:
+		printf("请输入要删除元素的位置\n");
+		scanf("%d", &i);
+		j = ListDelete(L, i, e);
+		if (j == ERROR)
+			printf("删除失败！\n");
+		else
+			printf("删除成功！\n");
+		getchar();
+		getchar();
+		break;
+	case 12:
+		if (ListTraverse(L) == INFEASIBLE)
+			printf("线性表不存在！\n");
+		getchar();
+		getchar();
+		break;
+	case 13:
+		j = MaxSubArray(L);
+		printf("最大和为%d\n", j);
+		getchar();
+		getchar();
+		break;
+	case 14:
+		printf("请输入连续子数组的和\n");
+		scanf("%d", &i);
+		j = SubArrayNum(L, i);
+		printf("该数组中和为%d的连续子数组的个数为%d\n", i, j);
+		getchar();
+		getchar();
+		break;
+	case 15:
+		sortList(L);
+		getchar();
+		getchar();
+		break;
+	case 0:
+		break;
+	}//end of switch
+	}//end of while
+	printf("欢迎下次再使用本系统！\n");
+	return 0;
+}//end of main()
+\end{lstlisting}
+
+\section*{附录B：基于链式存储结构线性表实现的源程序}
+
+\begin{lstlisting}
+#include <stdio.h>
+#include <malloc.h>
+#include <stdlib.h>
+#define OK 1
+#define ERROR 0
+
+typedef int status;
+typedef int ElemType; //数据元素类型定义
+
+typedef struct LNode { //单链表（链式结构）结点的定义
+	ElemType data;
+	struct LNode *next;
+} LNode, *LinkList;
+
+status InitList(LinkList &L)
+//初始条件：线性表不存在
+//操作结果：构造一个空的线性表L
+{
+	if (L != NULL) { //线性表不为空则返回ERROR
+		return ERROR;
+	}
+	L = (LinkList)malloc(sizeof(LNode)); //动态分配空间
+	L->data = 0; //初始值设为0；
+	L->next = NULL; //空表的首结点指向空
+	return OK;
+}
+
+status DestroyList(LinkList &L)
+//初始条件：线性表L已存在
+//操作结果：删除线性表
+{
+	if (L == NULL) { //线性表不存在
+		return ERROR;
+	}
+	LinkList ne, q = L->next; //前后结点
+	while (q) { //前结点不为空
+		ne = q->next; //后结点赋值
+		free(q); //删除前结点
+		q = ne;
+	}
+	free(L); //将线性表释放空间
+	L = NULL; //将线性表释放空间
+	return OK;
+}
+
+status ClearList(LinkList &L)
+//初始条件：线性表L已存在
+//操作结果：将L重置为空表
+{
+	if (L == NULL) { //线性表不存在
+		return ERROR;
+	}
+	LinkList p = L->next, ne; //前后结点
+	while (p) { //前结点不为空
+		ne = p->next; //后结点赋值
+		free(p); //删除前结点
+		p = ne;
+	}
+	L->next = NULL; //将线性表首结点指向空
+	return OK;
+}
+
+status ListEmpty(LinkList L)
+//初始条件：线性表L已存在
+//操作结果：若L为空表，返回OK，否则返回ERROR
+{
+	if (L == NULL) { //线性表不存在
+		return ERROR;
+	}
+	if (L->next == NULL) { //首结点为空
+		return OK;
+	}
+	return ERROR;
+}
+
+int ListLength(LinkList L)
+//初始条件：线性表L已存在
+//操作结果：返回L中数据元素的个数
+{
+	if (L == NULL) { //线性表不存在
+		return -1;
+	}
+	int len = 0; //初始化长度
+	LinkList p = L->next;
+	while (p) { //未到尾指针则循环
+		len++;
+		p = p->next;
+	}
+	return len;
+}
+
+status GetElem(LinkList L, int i, ElemType &e)
+//初始条件：线性表L已存在，1<=i<=ListLength(L)
+//操作结果：用e返回L中的第i个元素的值
+{
+	if (L == NULL) {
+		return ERROR;
+	}
+	if (i < 1 || i > ListLength(L)) { //i的值不正确，返回ERROR
+		return ERROR;
+	}
+	LinkList p = L;
+
+	while (i > 0) { //找到第i个元素
+		i--;
+		p = p->next;
+	}
+	e = p->data; //将第i个元素赋值给e
+	return OK;
+}
+
+status LocateElem(LinkList L, ElemType e)
+//初始条件：线性表L已存在
+//操作结果：返回e的结点位置
+{
+	if (L == NULL) { //线性表不存在
+		return ERROR;
+	}
+	int i = 1;
+	LinkList p = L->next;
+	while (p) { //未到尾指针
+		if (p->data == e) //找到了待找元素则返回结点位置
+			return i;
+		i++;
+		p = p->next;
+	}
+	return ERROR; //未找到结点位置返回ERROR
+}
+
+status PriorElem(LinkList L, ElemType e, ElemType &pre)
+//初始条件：线性表L已存在
+//操作结果：获取线性表L中元素e的前驱，保存在pre中，返回OK；
+如果没有前驱，返回ERROR
+{
+	if (L == NULL) { //线性表不存在
+		return ERROR;
+	}
+	LinkList p = L, ne = L->next; //前后结点
+	while (ne) {
+		if (e == ne->data) { //找到了待找元素
+			if (p == L) //e是第一个元素，没有前驱
+				return ERROR;
+			pre = p->data; //将前驱信息赋值给pre
+			return OK;
+		}
+		p = ne;
+		ne = p->next;
+	}
+	return ERROR; //未找到元素e
+}
+
+status NextElem(LinkList L, ElemType e, ElemType &next)
+//初始条件：线性表L已存在
+//操作结果：获取线性表L中元素e的后继，保存在next中，返回OK；
+如果没有后继，返回ERROR
+{
+	if (L == NULL) { //线性表不存在
+		return ERROR;
+	}
+	LinkList p = L->next, ne;
+	if (p == NULL) //线性表是空表
+		return ERROR;
+	ne = p->next;
+	while (ne) { //后元素存在
+		if (e == p->data) { //找到了待找元素
+			next = ne->data;
+			return OK;
+		}
+		p = ne;
+		ne = p->next;
+	}
+	return ERROR; //未找到元素e
+}
+
+status ListInsert(LinkList &L, int i, ElemType e)
+//初始条件：线性表L已存在，1<=i<=ListLength(L)+1
+//操作结果：在L中第i个位置之前插入新的元素数据e，L的长度+1
+{
+	if (L == NULL) { //线性表不存在
+		return ERROR;
+	}
+	if (i < 1 || i > ListLength(L) + 1) { //i的值不正确，返回ERROR
+		return ERROR;
+	}
+	LinkList p = L, t = (LinkList)malloc(sizeof(LNode)); 
+        //动态分配一个新空间
+	t->data = e;
+	while (i-- > 1) { //寻找位置i
+		p = p->next;
+	}
+	t->next = p->next; //修改指针位置
+	p->next = t;
+	return OK;
+}
+
+status ListDelete(LinkList &L, int i, ElemType &e)
+//初始条件：线性表L已存在且非空，1<=i<=ListLength(L)
+//操作结果：删除L中第i个数据元素，用e返回其值，L的长度-1
+{
+
+	if (L == NULL) { //线性表不存在
+		return ERROR;
+	}
+	if (i < 1 || i > ListLength(L)) { //i的值不正确，返回ERROR
+		return ERROR;
+	}
+	LinkList p = L;
+	while (i-- > 1) { //寻找位置i的前驱结点
+		p = p->next;
+	}
+	LinkList t = p->next; //t为位置i的结点指针
+	if (t == NULL) {
+		return ERROR;
+	}
+	e = t->data;
+	p->next = t->next;
+	free(t);
+	return OK;
+}
+
+status ListTraverse(LinkList L)
+//初始条件：线性表L已存在
+//操作结果：依次访问L中的每个元素
+{
+	if (L == NULL) { //线性表不存在
+		return ERROR;
+	}
+	LinkList p = L->next;
+	while (p != NULL) {
+		printf("%d ", p->data);
+		p = p->next;
+	}
+	return OK;
+}
+
+status reverseList(LinkList &L) {
+//初始条件：线性表L已存在
+//操作结果：将L翻转
+	if (L == NULL) {  //线性表不存在
+		return ERROR;
+	}
+	LinkList p1 = L->next, p2 = p1->next, p3 = p1;
+	p1->next = NULL; //首先将第一个元素置于末尾
+	while (p2 != NULL) {
+		p1 = p2;
+		p2 = p2->next;
+		p1->next = p3;
+		p3 = p1;
+	}
+	L->next = p1; //将最后一个元素置于开头
+	return OK;
+}
+
+status RemoveNthFromEnd(LinkList L, int n) {
+//初始条件：线性表L已存在且非空
+//操作结果：该链表中倒数第n个结点
+	if (L == NULL) { //线性表不存在
+		return ERROR;
+	}
+	int len = ListLength(L);
+	if (n > len || n < 1) { //n的值不正确
+		return ERROR;
+	}
+	LinkList p = L->next;
+	for (int i = 0; i < len - n; i++) { //找到倒数第n个结点
+		p = p->next;
+	}
+	return p->data;
+}
+
+status sortList(LinkList &L) {
+//初始条件：线性表L已存在
+//操作结果：将L由小到大排序
+	if (L == NULL) { //线性表不存在
+		return ERROR;
+	}
+	int flag = 0; //快速退出功能
+	LinkList p1 = L, p2 = p1->next;
+	while (1) { //采用冒泡排序的方法
+		flag = 0; //还原flag的值
+
+		while (p2->next != NULL) {
+			if (p2->data > p2->next->data) {
+				flag = 1; //表示有元素的位置要改变
+				p1->next = p2->next; //实现两指针翻转
+				p2->next = p1->next->next;
+				p1->next->next = p2;
+				p2 = p1->next;
+			}
+			p1 = p2;
+			p2 = p2->next;
+		}
+		if (flag == 0) //已经完成排序操作，直接返回OK，节省时间
+			break;
+		p1 = L; //一趟排序结束后重新回到头结点进行下一趟排序
+		p2 = p1->next;
+	}
+	return OK;
+}
+
+int main() {
+	LinkList L = NULL;
+	int op = 1;
+	int j;
+	ElemType i, e, pre, next;
+while (op) {
+	system("cls");
+	printf("\n");
+	printf("   Menu for Linear Table On Sequence Structure \n");
+	printf("-----------------------------------------------\n");
+	printf("       1. InitList（线性表的创建）\n");
+	printf("       2. DestroyList（销毁线性表）\n");
+	printf("       3. ClearList（清空线性表）\n");
+	printf("       4. ListEmpty（线性表判空）\n");
+	printf("       5. ListLength（求线性表长度）\n");
+	printf("       6. GetElem（获取元素）\n");
+	printf("       7. LocateElem（查找元素）\n");
+	printf("       8. PriorElem（获取前驱元素）\n");
+	printf("       9. NextElem（获取后继元素）\n");
+	printf("       10.ListInsert（插入元素）\n");
+	printf("       11.ListDelete（删除元素）\n");
+	printf("       12.ListTrabverse（遍历线性表）\n");
+	printf("       13.reverseList（链表翻转）\n");
+	printf("       14.RemoveNthFromEnd（倒数第n个结点）\n");
+	printf("       15.sortList（链表排序）\n");
+	printf("       0. Exit（退出菜单）\n");
+	printf("----------------------------------------------\n");
+	printf("   请选择你的操作[0~15]:");
+	scanf("%d", &op);
+	switch (op) {
+	case 1:
+		j = InitList(L);
+		if (j == OK)
+			printf("线性表创建成功！\n");
+		else
+			printf("线性表创建失败！\n");
+		getchar();
+		getchar();
+		break;
+	case 2:
+		j = DestroyList(L);
+		if (j == OK)
+			printf("线性表销毁成功！\n");
+		else
+			printf("线性表销毁失败！\n");
+		getchar();
+		getchar();
+		break;
+	case 3:
+		j = ClearList(L);
+		if (j == OK)
+			printf("线性表清空成功！\n");
+		else
+			printf("线性表清空失败！\n");
+		getchar();
+		getchar();
+		break;
+	case 4:
+		j = ListEmpty(L);
+		if ( j == OK)
+			printf("线性表为空！\n");
+		else if (j == ERROR)
+			printf("线性表不为空！\n");
+		else
+			printf("线性表不存在！\n");
+		getchar();
+		getchar();
+		break;
+	case 5:
+		j = ListLength(L);
+		if (j == -1)
+		printf("线性表不存在！\n");
+		else
+	       	printf("线性表长度为%d\n", ListLength(L));
+		getchar();
+		getchar();
+		break;
+	case 6:
+		printf("输入要获取的元素的位置\n");
+		scanf("%d", &i);
+		j = GetElem(L, i, e);
+		if (j == ERROR)
+		printf("获取元素失败！\n");
+		else
+		printf("链表中第%d个元素是%d\n", i, e);
+		getchar();
+		getchar();
+		break;
+	case 7:
+		printf("请输入要查找的元素\n");
+		scanf("%d", &e);
+		j = LocateElem(L, e);
+		if (j == ERROR)
+			printf("该元素不存在！\n");
+		else
+			printf("该元素的位置序号是%d\n", j);
+		getchar();
+		getchar();
+		break;
+	case 8:
+		printf("请输入要查找的元素\n");
+		scanf("%d", &e);
+		j = PriorElem(L, e, pre);
+		if (j == ERROR)
+			printf("查找失败\n");
+		else
+			printf("%d的前驱元素是%d\n", e, pre);
+		getchar();
+		getchar();
+		break;
+	case 9:
+		printf("请输入要查找的元素\n");
+		scanf("%d", &e);
+		j = NextElem(L, e, next);
+		if (j == ERROR)
+			printf("查找失败\n");
+		else
+			printf("%d的后继元素是%d\n", e, next);
+		getchar();
+		getchar();
+		break;
+	case 10:
+		printf("输入要插入的元素的位置以及元素值\n");
+		scanf("%d %d", &i, &e);
+		j = ListInsert(L, i, e);
+		if (j == OK)
+			printf("插入成功！\n");
+		else
+			printf("插入失败！\n");
+		getchar();
+		getchar();
+		break;
+	case 11:
+		printf("请输入要删除元素的位置\n");
+		scanf("%d", &i);
+		j = ListDelete(L, i, e);
+		if (j == ERROR)
+			printf("删除失败！\n");
+		else
+			printf("删除成功！\n");
+		getchar();
+		getchar();
+		break;
+	case 12:
+	      ListTraverse(L);
+		getchar();
+		getchar();
+		break;
+	case 13:
+		reverseList(L);
+		printf("翻转成功\n");
+		getchar();
+		getchar();
+		break;
+	case 14:
+		printf("请输入想要获得的倒数第n个元素\n");
+		scanf("%d", &i);
+		j = RemoveNthFromEnd(L, i);
+		if (j == ERROR)
+			printf("n的值错误\n", i);
+		else
+			printf("倒数第%d个元素为%d\n", i, j);
+		getchar();
+		getchar();
+		break;
+	case 15:
+		j = sortList(L);
+		printf("排序成功\n");
+		getchar();
+		getchar();
+		break;
+	case 0:
+		break;
+	}//end of switch
+}//end of while
+printf("欢迎下次再使用本系统！\n");
+return 0;
+}//end of main()
+\end{lstlisting}
+
+\section*{附录C：基于顺序存储结构线性表实现的源程序}
+
+\begin{lstlisting}
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#define OK 1
+#define ERROR 0
+
+typedef int status;
+typedef int KeyType;
+
+typedef struct {  //二叉树结点类型定义
+	KeyType key;
+	char others[20];
+} TElemType;
+
+typedef struct BiTNode { //二叉链表结点的定义
+	TElemType data;
+	struct BiTNode *lchild, *rchild;
+} BiTNode, *BiTree;
+
+void visit(BiTree T) { //二叉树访问
+	printf("%d,%s ", T->data.key, T->data.others);
+}
+
+status CreateBiTree(BiTree &T, TElemType definition[], int begin) {
+//初始条件：二叉树已存在
+//操作结果：按definition构造二叉树T
+	for (int i = 0; definition[i].key != -1; i++) {
+            //检查是否有关键字相同的结点
+		for (int j = i + 1; definition[j].key != -1; j++) {
+			if (definition[i].key == definition[j].key &&
+                    definition[i].key != 0) {
+				return ERROR;
+			}
+		}
+	}
+	static int k = 0;//静态变量保持在递归中k的值可以传回上层函数
+	if (definition[k].key == -1) {
+		return OK;
+	}
+	T = (BiTree)malloc(sizeof(BiTNode));
+	if (definition[k].key != 0) {//下一个结点不为空
+		T->data.key = definition[k].key;
+		strcpy(T->data.others, definition[k].others);
+		k++;
+		CreateBiTree(T->lchild, definition, begin + 1);
+		CreateBiTree(T->rchild, definition, begin + 1);
+	} else {           //下一结点为空
+		k++;
+		T = NULL;
+	}
+	if (begin == 1)
+		k = 0;
+	return OK;
+}
+
+status DestroyBiTree(BiTree &T) {
+//初始条件：二叉树T已存在
+//操作结果：销毁二叉树T
+	if (T == NULL)
+		return OK;
+	DestroyBiTree(T->lchild);
+	DestroyBiTree(T->rchild);
+	free(T);
+	T = NULL;
+	return OK;
+}
+
+status ClearBiTree(BiTree &T) {
+//初始条件：二叉树T已存在
+//操作结果：将二叉树T清空为空树
+	if (T == NULL)
+		return OK;
+	ClearBiTree(T->lchild);
+	ClearBiTree(T->rchild);
+	T->data.key = 0;
+	strcpy(T->data.others, "\0");
+	T->lchild = NULL;
+	T->rchild = NULL;
+	return OK;
+}
+
+status BiTreeEmpty(BiTree T) {
+//初始条件：二叉树T已存在
+//操作结果：若T为空二叉树，则返回OK，否则返回ERROR
+	if (T == NULL)
+		return OK;
+	else
+		return ERROR;
+}
+
+int BiTreeDepth(BiTree T) {
+//初始条件：二叉树T已存在
+//操作结果：返回T的深度
+	if (T == NULL) {
+		return 0;
+	}
+	int ldeep = 1 + BiTreeDepth(T->lchild);
+	int rdeep = 1 + BiTreeDepth(T->rchild);
+	if (ldeep > rdeep)
+		return ldeep;
+	else
+		return rdeep;
+	/********** End **********/
+}
+
+BiTNode *LocateNode(BiTree T, KeyType e) {
+//初始条件：二叉树T已存在，e是T中某个结点关键字
+//操作结果：返回该结点指针
+	if (T == NULL) { //已经到了叶子结点，就返回空结点
+		return NULL;
+	}
+	if (T->data.key == e) { //找到了，则返回该结点
+		return T;
+	} else { //没有找到，继续向下寻找
+		BiTNode *leftResult = LocateNode(T->lchild, e);
+		BiTNode *rightResult = LocateNode(T->rchild, e);
+		if (leftResult != NULL) { //在左子树中说明找到了
+			return leftResult; //返回刚刚找到的结点
+		} else { 
+			return rightResult;
+		}
+	}
+}
+
+BiTNode *LocateParent(BiTree T, KeyType e, int k) {
+//初始条件：二叉树T已存在，e是T中某个结点关键字
+//操作结果：返回父结点指针
+	if (T == NULL)
+		return NULL;
+	if (T->data.key == e) {
+		if (k == 1) //k=1就是头结点，k>1就不是头结点
+			return NULL;
+		else
+			return T;
+	}
+	BiTree Node = LocateNode(T, e);
+	if (Node == NULL) //e的值不正确
+		return NULL;
+	BiTree leftNode = LocateParent(T->lchild, e, k + 1);
+	if (leftNode != NULL) { //e在T的左子树中
+		if (T->lchild == Node) //T的左孩子就是e，返回T
+			return T;
+		else
+			return leftNode;
+	}
+	BiTree rightNode = LocateParent(T->rchild, e, k + 1);
+	if (rightNode != NULL) { //e在T的右子树中
+		if (T->rchild == Node) //T的右孩子就是e，返回T
+			return T;
+		else
+			return rightNode;
+	}
+	return NULL;
+}
+
+BiTNode *LocateBrother(BiTree T, KeyType e) {
+//初始条件：二叉树T已存在，e是T中某个结点关键字
+//操作结果：返回值为兄弟结点的指针
+	BiTree ParentNode = LocateParent(T, e, 1);
+	if (!ParentNode)//e的父结点不存在
+		return NULL;
+	BiTree Node = LocateNode(T, e); //e一定存在且不为头结点
+	if (Node == ParentNode->lchild)
+		return ParentNode->rchild;
+	else
+		return ParentNode->lchild;
+}
+
+int NodeDepth(BiTree T, KeyType e) {
+//初始条件：二叉树T已存在，e是T中某个结点关键字
+//操作结果：返回Node结点的深度
+	if (T->data.key == e)
+		return 1;
+	BiTree ParentNode = LocateNode(T, e); //找到e的父结点
+	if (ParentNode == NULL) //e是头结点
+		return ERROR;
+	int deep = 1;
+	do {
+		ParentNode = LocateParent(T, ParentNode->data.key, 1);
+		deep++;
+	} while (T != ParentNode); //循环求父结点，直到结点等于头结点
+	return deep;
+}
+
+status UnExistNode(BiTree T, KeyType value) {
+//初始条件：二叉树已存在
+//操作结果：若value在T中存在，则返回ERROR，否则返回OK
+	if (T == NULL) { //到了空结点
+		return OK;
+	}
+	if (T->data.key == value) { //关键字存在
+		return ERROR; //赋值失败，返回0
+	}
+	int ans = 1 * UnExistNode(T->lchild, value) * 
+                UnExistNode(T->rchild, value);
+	//采用乘法，只要关键字存在就失败
+	if (ans == 0) //关键字存在
+		return ERROR;
+	else //关键字不存在
+		return OK;
+}
+
+
+status Assign(BiTree &T, KeyType e, TElemType value, int k) {
+//初始条件：二叉树T已存在，e是某个结点关键字，value的关键字与T不重复
+//操作结果：用value代替e的结点数据
+	BiTree Node = LocateNode(T, e); //找关键字为e的结点
+	if (!Node) //e的值不正确，返回ERROR
+		return ERROR;
+	if (!UnExistNode(T,value.key)&&value.key!=Node->data.key){
+                //关键字重复且不是e
+		return ERROR; //赋值失败，返回0
+	}
+	Node->data = value;
+	return OK;
+}
+
+status InsertNode(BiTree &T, KeyType e, int LR, TElemType c) {
+//初始条件：二叉树T已存在，e是T中某个结点关键字，c中的关键字与T不重复
+//操作结果：LR=0或1，插入c为e的左子树或右子树，e原有的左子树
+或右子树变为c的右子树LR=-1插入到头结点，原二叉树变为c的右子树
+	if (LR == -1) { //插入的结点是头结点
+		BiTree temp = (BiTree)malloc(sizeof(BiTNode));
+		temp->data = c;
+		temp->lchild = NULL;
+		temp->rchild = T; //原来树是新结点的右子树
+		T = temp;
+		return OK;
+	}
+	BiTree Node = LocateNode(T, e); //找到需要插入结点的父结点
+	if (!Node) //e的值错误
+		return 0;
+	if (!UnExistNode(T, c.key) && c.key != Node->data.key) { 
+                //关键字重复且不是e
+		return ERROR; //赋值失败，返回0
+	}
+	BiTree temp = (BiTree)malloc(sizeof(BiTNode));
+	temp->data = c;
+	temp->lchild = NULL;
+	if (LR == 0) { //左孩子
+		temp->rchild = Node->lchild;
+		Node->lchild = temp;
+	} else if (LR == 1) { //右孩子
+		temp->rchild = Node->rchild;
+		Node->rchild = temp;
+	}
+	return OK;
+}
+
+status DeleteNode(BiTree &T, KeyType e, int k) {
+//初始条件：二叉树T已存在，e是T中某个结点关键字
+//操作结果：e是叶子结点，直接删除；只有左子树或右子树，用其左子树
+或右子树代替e的位置；既有左子树又有右子树，将左子树代替e，右子树插
+入到左子树的最右结点的右子树
+	if (T == NULL)
+		return 0;
+	if (e == T->data.key) { //判断的结点就是需要删除的结点
+		if (k == 1) { //k的作用是判断e是否为头结点
+			int ans = DeleteNode(T, e, k + 1); 
+                    //递归自己，假设头结点的孩子还是头结点
+			if (ans == OK) { //头结点
+				return OK;
+			} else if (ans == 2) { //头结点就是孤立结点
+				return OK;
+			} else if (ans == 3) {
+				BiTree temp = T;
+				T = T->lchild;
+				free(temp);
+				temp = NULL;
+				return OK;
+			} else if (ans == 4) {
+				BiTree temp = T;
+				T = temp->rchild;
+				free(temp);
+				temp = NULL;
+				return OK;
+			}
+		} else if (T->lchild == NULL && T->rchild == NULL) { 
+                    //e是叶子结点
+			free(T);
+			T = NULL;
+			return 2;
+		} else if (T->lchild != NULL && T->rchild != NULL) { 
+                    //e左右孩子都存在
+			BiTree temp = T->lchild;
+			while (temp->rchild) { 
+                    //找到T左子树的最右侧，需要在后面接入T的右子树
+				temp = temp->rchild;
+			}
+			temp->rchild = T->rchild;
+			return 3;
+		} else if (T->lchild == NULL) { //只有右孩子
+			return 4;
+		} else { //只有左孩子
+			return 3;
+		}
+	}
+	int lans = DeleteNode(T->lchild, e, k + 1); //左答案
+	if (lans == OK) { //OK说明已经完成删除操作，只需一步步退出递归
+		return OK;
+	} else if (lans == 2) { //e是叶子结点，删除后T的左子树变为空
+		T->lchild == NULL;
+		return OK;
+	} else if (lans == 3) { //需要将T的左子树变成e的左子树
+		BiTree temp = T->lchild;
+		T->lchild = temp->lchild;
+		free(temp);
+		temp = NULL;
+		return OK;
+	} else if (lans == 4) { //需要将T的左子树变成e的右子树
+		BiTree temp = T->lchild;
+		T->lchild = temp->rchild;
+		free(temp);
+		temp = NULL;
+		return OK;
+	} //在T的左子树中并未找到e
+	int rans = DeleteNode(T->rchild, e, k + 1);
+	if (rans == OK) {
+		return OK;
+	} else if (rans == 2) {
+		T->rchild = NULL;
+		return OK;
+	} else if (rans == 3) {
+		BiTree temp = T->rchild;
+		T->rchild = temp->lchild;
+		free(temp);
+		temp = NULL;
+		return OK;
+	} else if (rans == 4) {
+		BiTree temp = T->rchild;
+		T->rchild = temp->rchild;
+		free(temp);
+		temp = NULL;
+		return OK;
+	}
+	return 0;
+}
+
+status PreOrderTraverse(BiTree T) {
+//初始条件：二叉树T已存在
+//操作结果：先序遍历二叉树T
+	if (T == NULL)
+		return ERROR;
+	visit(T);
+	PreOrderTraverse(T->lchild);
+	PreOrderTraverse(T->rchild);
+	return OK;
+}
+
+status InOrderTraverse(BiTree T) {
+//初始条件：二叉树T已存在
+//操作结果：中序遍历二叉树T
+	if (T == NULL)
+		return ERROR;
+	InOrderTraverse(T->lchild);
+	visit(T);
+	InOrderTraverse(T->rchild);
+	return OK;
+}
+
+status PostOrderTraverse(BiTree T) {
+//初始条件：二叉树T已存在
+//操作结果：后序遍历二叉树T
+	if (T == NULL)
+		return ERROR;
+	PostOrderTraverse(T->lchild);
+	PostOrderTraverse(T->rchild);
+	visit(T);
+	return OK;
+}
+
+status LevelOrderTraverse(BiTree T) {
+//初始条件：二叉树T已存在
+//操作结果：层序遍历二叉树T
+	if (T == NULL)
+		return ERROR;
+	BiTree Queue[20];
+	int i = 0, k = 0;
+	Queue[i++] = T;
+
+	while (k < i) {
+		BiTree current = Queue[k++];
+		visit(current);
+		if (current->lchild)
+			Queue[i++] = current->lchild;
+		if (current->rchild)
+			Queue[i++] = current->rchild;
+	}
+	return OK;
+}
+
+status InvertTree(BiTree &T) {
+//初始条件：二叉树T已存在
+//操作结果：将二叉树T左右子树互换位置
+	if (T == NULL)
+		return OK;
+	BiTree temp = T->lchild;
+	T->lchild = T->rchild;
+	T->rchild = temp;
+	InvertTree(T->lchild);
+	InvertTree(T->rchild);
+	return OK;
+}
+
+BiTNode *LocateCommonAncestor(BiTree &T, KeyType e1, KeyType e2) {
+//初始条件：二叉树T已存在
+//操作结果：返回两个结点e1和e2的最近祖先
+	BiTree Node1 = LocateNode(T, e1); //找到两个要求的结点
+	BiTree Node2 = LocateNode(T, e2);
+	if (Node1 == NULL || Node2 == NULL) //其中有空结点据返回NULL
+		return NULL;
+	int deep1 = NodeDepth(T, e1); //两个结点的深度
+	int deep2 = NodeDepth(T, e2);
+
+	while (Node1 != Node2) { //循环找到最近祖先则退出循环
+		if (deep1 > deep2) {
+			Node1 = LocateParent(T, Node1->data.key, 1);
+			deep1--;
+		} else if (deep1 <= deep2) {
+			Node2 = LocateParent(T, Node2->data.key, 1);
+			deep2--;
+		}
+	}
+	return Node1;
+}
+
+static int k = 0;
+
+status JudgeBiTree(BiTree T) {
+//初始条件：二叉树T已存在
+//操作结果：二叉树T是为二叉排序树则返回OK，否则返回ERROR
+	//按照先序遍历整个树，k保证先遍历的结点小于后遍历的结点
+	int ans = 1; //采用乘法，只要出现一次不符合二叉排序的
+                结点就等于0，否则就等于1
+	if (T == NULL) //找到空结点
+		return OK;
+	ans *= JudgeBiTree(T->lchild); //首先访问左子树中的结点
+
+	if (T->data.key >= k) { //当前结点的数据大于之前访问的结点
+		k = T->data.key;
+	} else //不满足则直接返回0；
+		return ERROR;
+	ans *= JudgeBiTree(T->rchild);
+	return ans; //成功返回1，失败返回0
+}
+
+int main( ) {
+	BiTree T = NULL, getT = NULL;
+	int op = 1, ans, i = 0, begin = 0, e, LR, e2;
+	TElemType value;
+	while (op) {
+	system("cls");
+	printf("\n");
+	printf("    Menu for Linear Table On Sequence Structure \n");
+	printf("----------------------------------------------\n");
+	printf("    	1. CreateBiTree （创建二叉树）\n");
+	printf("        2. DestroyBiTree （销毁二叉树）\n");
+	printf("    	3. ClearBiTree （清空二叉树）\n");
+	printf("        4. BiTreeEmpty （二叉树判空）\n");
+	printf("    	5. BiTreeDepth （求二叉树深度）\n");
+	printf("        6. LocateNode （查找结点）\n");
+	printf("    	7. Assign （结点赋值）\n");
+	printf("        8. LocateBrother （获取兄弟结点）\n");
+	printf("    	9. InsertNode （插入结点）\n");
+	printf("        10.DeleteNode （删除结点）\n");
+	printf("    	11.PreOrderTraverse （前序遍历）\n");
+	printf("        12.InOrderTraverse （中序遍历）\n");
+	printf("        13.PostOrderTraverse （后序遍历）\n");
+	printf("        14.LevelOrderTraverse （层序遍历）\n");
+	printf("        15.InvertTree （翻转二叉树）\n");
+	printf("        16.LocateParent （获取父亲结点）\n");
+	printf("        17.NodeDepth （求结点的深度）\n");
+	printf("        18.LocateCommonAncestor （获取最近祖先）\n");
+	printf("        19.JudgeBiTree （判断二叉排序树）\n");
+	printf("        0. Exit （退出菜单）\n");
+	printf("----------------------------------------------\n");
+	printf("    请选择你的操作[0~19]:");
+	scanf("%d", &op);
+	switch (op) {
+	case 1:
+		if (begin != 0) {
+			printf("创建失败，二叉树已存在");
+		} else {
+			printf("输入序列为二叉树带空子树的先序
+            遍历结点序列\n关键字为0时，表示空子树，为-1表示输入结束\n");
+			TElemType definition[100];
+			do {
+				scanf("%d%s", 
+                &definition[i].key, definition[i].others);
+				printf("输入下一结点数据\n");
+			} while (definition[i++].key != -1);
+			ans = CreateBiTree(T, definition, 1);
+			if (ans == OK) {
+				printf("创建成功");
+			} else
+				printf("关键字不唯一");
+			begin++;
+		}
+		i = 0;
+		getchar();
+		getchar();
+		break;
+	case 2:
+		if (T == NULL)
+			printf("销毁失败");
+		else {
+			ans = DestroyBiTree(T);
+			if (ans == OK)
+				printf("销毁成功");
+			begin--;
+		}
+		getchar();
+		getchar();
+		break;
+	case 3:
+		if (T == NULL)
+			printf("清除失败");
+		else {
+			ans = ClearBiTree(T);
+			if (ans == OK)
+				printf("清除成功");
+		}
+		getchar();
+		getchar();
+		break;
+	case 4:
+		ans = BiTreeEmpty(T);
+		if (ans == OK)
+			printf("二叉树为空");
+		else
+			printf("二叉树不为空");
+		getchar();
+		getchar();
+		break;
+	case 5:
+		ans = BiTreeDepth(T);
+		printf("二叉树深度为%d", ans);
+		getchar();
+		getchar();
+		break;
+	case 6:
+		printf("请输入想要查找的关键字\n");
+		scanf("%d", &e);
+		getT = LocateNode(T, e);
+		if (getT == NULL)
+			printf("未找到");
+		else {
+			printf("找到了\n");
+			visit(getT);
+		}
+		getchar();
+		getchar();
+		break;
+	case 7:
+		printf("请输入赋值的关键字，新赋值的数据\n");
+		scanf("%d %d %s", &e, &value.key, value.others);
+		ans = Assign(T, e, value);
+		if (ans == 1)
+			printf("赋值成功");
+		else
+			printf("赋值失败");
+		getchar();
+		getchar();
+		break;
+	case 8:
+		printf("请输入关键字");
+		scanf("%d", &e);
+		getT = LocateBrother(T, e);
+		if (getT == NULL)
+			printf("无兄弟节点");
+		else
+			printf("已找到，且%d的兄弟节点为%d,%s",
+            e, getT->data.key, getT->data.others);
+		getchar();
+		getchar();
+		break;
+	case 9:
+		printf("请输入关键字、左右、插入数据\n");
+		scanf("%d %d %d %s", &e, &LR, &value.key, value.others);
+		ans = InsertNode(T, e, LR, value);
+		if (ans == 0)
+			printf("插入失败");
+		else
+			printf("插入成功");
+		getchar();
+		getchar();
+		break;
+	case 10:
+		printf("请输入想要删除的结点的关键字\n");
+		scanf("%d", &e);
+		ans = DeleteNode(T, e, 1);
+		if (ans == 0)
+			printf("删除失败");
+		else
+			printf("删除成功");
+		getchar();
+		getchar();
+		break;
+	case 11:
+		printf("先序遍历:");
+		ans = PreOrderTraverse(T);
+		getchar();
+		getchar();
+		break;
+	case 12:
+		printf("中序遍历:");
+		ans = InOrderTraverse(T);
+		getchar();
+		getchar();
+		break;
+	case 13:
+		printf("后序遍历:");
+		ans = PostOrderTraverse(T);
+		getchar();
+		getchar();
+		break;
+	case 14:
+		printf("层序遍历:");
+		ans = LevelOrderTraverse(T);
+		getchar();
+		getchar();
+		break;
+	case 15:
+		ans = InvertTree(T);
+		printf("翻转成功");
+		getchar();
+		getchar();
+		break;
+	case 16:
+		printf("输入要获取父亲结点的关键字\n");
+		scanf("%d", &e);
+		getT = LocateParent(T, e, 1);
+		if (getT) {
+			printf("%d的父亲结点是");
+			visit(getT);
+		} else
+			printf("获取失败");
+		getchar();
+		getchar();
+		break;
+	case 17:
+		printf("输入要获取深度的结点关键字\n");
+		scanf("%d", &e);
+	    ans = NodeDepth(T, e);
+		if (ans == ERROR)
+			printf("获取失败，关键字不存在");
+		else
+			printf("%d的深度为%d", e, ans);
+		getchar();
+		getchar();
+		break;
+	case 18:
+		printf("输入要获取祖先的两个结点\n");
+		scanf("%d %d", &e, &e2);
+		getT = LocateCommonAncestor(T, e, e2);
+		if (getT == NULL)
+			printf("获取失败，关键字不存在");
+		else {
+			printf("最近祖先为");
+			visit(getT);
+		}
+		getchar();
+		getchar();
+		break;
+	case 19:
+		ans = JudgeBiTree(T);
+			if (ans == ERROR)
+			printf("不是二叉排序树");
+		else
+			printf("是二叉排序树");
+		k = 0; //重置静态变量，防止下一次使用该函数出现错误
+		getchar();
+		getchar();
+		break;
+	}//end of switch
+	}//end of while
+	printf("欢迎下次再使用本系统！\n");
+	return 0;
+}//end of main()
+\end{lstlisting}
+
+\section*{附录D：基于邻接表图实现的源程序}
+
+\begin{lstlisting}
+#include "stdio.h"
+#include "stdlib.h"
+#include <string.h>
+
+#define TRUE 1
+#define FALSE 0
+#define OK 1
+#define ERROR 0
+#define INFEASIBLE -1
+#define OVERFLOW -2
+#define MAX_VERTEX_NUM 20
+
+typedef int status;
+typedef int KeyType;
+
+//顶点类型定义
+typedef struct {
+	KeyType  key;
+	char others[20];
+} VertexType;
+
+//表结点类型定义
+typedef struct ArcNode {
+	int adjvex; //顶点位置编号
+	struct ArcNode  *nextarc; //下一个表结点指针
+} ArcNode;
+
+//头结点及其数组类型定义
+typedef struct VNode {
+	VertexType data; //顶点信息
+	ArcNode *firstarc; //指向第一条弧
+} VNode, AdjList[MAX_VERTEX_NUM];
+
+//邻接表的类型定义
+typedef  struct {
+	AdjList vertices; //头结点数组
+	int vexnum, arcnum; //顶点数、弧数
+} ALGraph;
+
+//访问顶点
+void visit(VertexType v) {
+	printf("%d %s  ", v.key, v.others);
+}
+
+//输出顶点信息以及连接的其他顶点的序号
+void print(ALGraph G) {
+	for (int i = 0; i < G.vexnum; i++) {
+		ArcNode *p = G.vertices[i].firstarc;
+		visit(G.vertices[i].data);
+		while (p) {
+			printf(" %d", p->adjvex);
+			p = p->nextarc;
+		}
+		printf("\n");
+	}
+}
+
+//根据V和VR构造图G并返回OK
+status CreateCraph(ALGraph &G, VertexType V[], KeyType VR[][2]) {
+	if (V[0].key == -1)
+		return ERROR;//插入的点集为空
+	int i, j, one = -1, two = -1, flag = 0;
+	for (i = 0; VR[i][0] != -1; i++); //计算边数
+	G.arcnum = i;
+	for (i = 0; V[i].key != -1; i++); //计算点数
+	if (i > MAX_VERTEX_NUM) //点数超过了最大的定义域时
+		return ERROR;
+	G.vexnum = i;
+	for (i = 0; i < G.vexnum - 1; i++) 
+            //判断是否有不同结点关键字相同
+		for (j = i + 1; j < G.vexnum; j++)
+			if (V[i].key == V[j].key)
+				return ERROR;
+
+	for (i = 0; i < G.arcnum; i++) { //判断边连接的顶点是否存在
+		for (j = 0; j < G.vexnum; j++) {
+			if (VR[i][0] == V[j].key)
+				break;
+		}
+		if (j == G.vexnum) { 
+            //遍历顶点集没有找到该边连接的顶点
+			return ERROR;
+		}
+		for (j = 0; j < G.vexnum; j++) {
+			if (VR[i][1] == V[j].key)
+				break;
+		}
+		if (j == G.vexnum) {
+			return ERROR;
+		}
+	}
+	for (i = 0; i < G.vexnum; i++) { //顶点赋值给图
+		G.vertices[i].data = V[i];
+		G.vertices[i].firstarc = NULL;
+	}
+	for (i = 0; i < G.arcnum; i++) { 
+                //采用头插法插入相邻边，先插入的结点后输出
+		flag = 0;
+		for (j = 0; j < G.vexnum; j++)
+			if (VR[i][0] == G.vertices[j].data.key) { 
+                //找到边的第一个顶点在顶点集中的位置
+				one = j;
+				break;
+			}
+		for (j = 0; j < G.vexnum; j++)
+			if (VR[i][1] == G.vertices[j].data.key) { 
+                //找到边的第二个顶点在顶点集中的位置
+				two = j;
+				break;
+			}
+		if (one == two) //环，则不插入
+			continue;
+		ArcNode *q = G.vertices[one].firstarc;
+		while (q) {
+			if (q->adjvex == two) { 
+                //该结点的相邻结点已经出现过
+				flag = 1;
+				break;
+			}
+			q = q->nextarc;
+		}
+		if (flag == 1)
+			continue;
+		ArcNode *p = (ArcNode *)malloc(sizeof(ArcNode));
+		p->adjvex = two;
+		p->nextarc = G.vertices[one].firstarc;
+		G.vertices[one].firstarc = p;
+		p = (ArcNode *)malloc(sizeof(ArcNode));
+		p->adjvex = one;
+		p->nextarc = G.vertices[two].firstarc;
+		G.vertices[two].firstarc = p;
+	}
+	return OK;
+}
+
+//销毁无向图G,删除G的全部顶点和边，G不存在返回ERROR，
+存在并删除成功返回OK
+status DestroyGraph(ALGraph &G) {
+	int i;
+	ArcNode *p = NULL, *q = NULL;
+	for (i = 0; i < G.vexnum; i++) {
+		p = G.vertices[i].firstarc;
+		while (p) {
+			q = p->nextarc;
+			free(p);
+			p = q;
+		}
+	}
+	G.arcnum = 0;
+	G.vexnum = 0;
+	return OK;
+}
+
+//根据u在图G中查找顶点，查找成功返回位序，否则返回-1
+int LocateVex(ALGraph G, KeyType u) {
+	for (int i = 0; i < G.vexnum; i++) {
+		if (u == G.vertices[i].data.key) {
+			return i;
+		}
+	}
+	return -1;
+}
+
+//根据u在图G中查找顶点，查找成功将该顶点值修改成value，返回OK；
+//如果查找失败或关键字不唯一，返回ERRO
+status PutVex(ALGraph &G, KeyType u, VertexType value) {
+	for (int i = 0; i < G.vexnum; i++)
+		if(value.key==G.vertices[i].data.key&&value.key!= u)
+			return ERROR;
+	int i = LocateVex(G, u);
+	if (i == -1)
+		return ERROR;
+	G.vertices[i].data = value;
+	return OK;
+}
+
+//根据u在图G中查找顶点，查找成功返回顶点u的第一邻接顶点位序，否则返回-1；
+int FirstAdjVex(ALGraph G, KeyType u) {
+	for (int i = 0; i < G.vexnum; i++) {
+		if (u == G.vertices[i].data.key) {
+			return G.vertices[i].firstarc->adjvex;
+		}
+	}
+	return -1;
+}
+
+//v对应G的一个顶点,w对应v的邻接顶点；
+//操作结果是返回v的（相对于w）下一个邻接顶点的位序；
+//如果w是最后一个邻接顶点，或v、w对应顶点不存在，则返回-1。
+int NextAdjVex(ALGraph G, KeyType v, KeyType w) {
+	for (int i = 0; i < G.vexnum; i++) {
+		if (v == G.vertices[i].data.key) {
+			ArcNode *p = G.vertices[i].firstarc;
+			while (p) {
+				if (G.vertices[p->adjvex].data.key == w) {
+					if (p->nextarc != NULL)
+					return p->nextarc->adjvex;
+					else
+					return -1;
+				}
+				p = p->nextarc;
+			}
+		}
+	}
+	return -1;
+}
+
+//在图G中插入顶点v，成功返回OK,否则返回ERROR
+status InsertVex(ALGraph &G, VertexType v) {
+	if (G.vexnum >= MAX_VERTEX_NUM)
+		return ERROR;
+	for (int i = 0; i < G.vexnum; i++)
+		if (v.key == G.vertices[i].data.key)
+			return ERROR;
+	G.vertices[G.vexnum].data = v;
+	G.vertices[G.vexnum].firstarc = NULL;
+	G.vexnum++;
+	return OK;
+}
+
+//在图G中删除关键字v对应的顶点以及相关的弧，成功返回OK,否则返回ERROR
+status DeleteVex(ALGraph &G, KeyType v) {
+	int pre_vexnum = G.vexnum; //保留原始的结点个数
+	int del_arc_2 = 0; //记录被删的边数
+	int k, i; //记录被删结点的位置序号
+	for (i = 0; i < G.vexnum; i++) { 
+                //找到被删结点并删除，不会把之后结点前移
+		if (G.vertices[i].data.key == v) { //找到了需要删的结点
+			k = i;
+			ArcNode *temp = G.vertices[i].firstarc;
+			while (temp) {
+			G.vertices[i].firstarc =
+                    G.vertices[i].firstarc->nextarc; 
+                //依次删除连接该结点的所有边
+				free(temp);
+				temp = G.vertices[i].firstarc;
+				del_arc_2++;
+			}
+			break;
+		}
+	}
+	if (i == G.vexnum) 
+		return ERROR;
+	for (int i = 0; i < G.vexnum; i++) {
+		if (G.vertices[i].data.key == v)
+			continue; //跳过删除结点
+		ArcNode *p = G.vertices[i].firstarc;
+                //删除其他结点中的该边
+		if (p != NULL && G.vertices[p->adjvex].data.key == v) { 
+			G.vertices[i].firstarc = p->nextarc;
+			free(p);
+			del_arc_2++;
+		} else if (p)
+
+			while (p->nextarc) {
+		if (G.vertices[p->nextarc->adjvex].data.key == v) {
+				ArcNode *temp = p->nextarc;
+				p->nextarc = temp->nextarc;
+				free(temp);
+				del_arc_2++;
+				temp = NULL;
+			} else
+				p = p->nextarc;
+		}
+	}
+
+	for (int i = 0; i < G.vexnum; i++) {
+		ArcNode *p = G.vertices[i].firstarc; 
+		while (p) {
+			if (p->adjvex > k)
+				p->adjvex--;
+			p = p->nextarc;
+		}
+	}
+	for (int i = k; i < G.vexnum - 1; i++) { 
+		G.vertices[i] = G.vertices[i + 1];
+	}
+	G.vexnum--;
+	G.arcnum = G.arcnum - del_arc_2 / 2;
+	if (G.vexnum == 0) //图中已经删除完顶点
+		return ERROR;
+	return OK;
+}
+
+//在图G中增加弧<v,w>，成功返回OK,否则返回ERROR
+status InsertArc(ALGraph &G, KeyType v, KeyType w) {
+	if (v == w) //插入的边是环则插入失败
+		return ERROR;
+	for (int i = 0; i < G.vexnum; i++)
+	if (v == G.vertices[i].data.key) 
+	for (int j = 0; j < G.vexnum; j++)
+	if (w == G.vertices[j].data.key) { 
+		ArcNode *p = G.vertices[i].firstarc;
+		while (p) {
+			if (p->adjvex == j) //插入的边已经存在
+				return ERROR;
+			p = p->nextarc;
+		} //退出循环，说明插入的边不存在
+		p = (ArcNode *)malloc(sizeof(ArcNode));
+		p->adjvex = i;
+		p->nextarc = G.vertices[j].firstarc;
+		G.vertices[j].firstarc = p;
+		p = (ArcNode *)malloc(sizeof(ArcNode));
+		p->adjvex = j;
+		p->nextarc = G.vertices[i].firstarc;
+		G.vertices[i].firstarc = p;
+		G.arcnum++;
+		return OK;
+		}
+	return ERROR;
+}
+
+//在图G中删除弧<v,w>，成功返回OK,否则返回ERROR
+status DeleteArc(ALGraph &G, KeyType v, KeyType w) {
+	int k = 0;
+
+	for (int i = 0; i < G.vexnum; i++) {
+
+	if (v == G.vertices[i].data.key) { //找到了第一个顶点的位置
+	for (int j = 0; j < G.vexnum; j++) {
+	if (w == G.vertices[j].data.key) { //找到了第二个顶点的位置
+	ArcNode *p = G.vertices[i].firstarc;
+	ArcNode *p_last = p;
+	while (p) {
+		if (p->adjvex == j) {
+			if (p == p_last) {
+				G.vertices[i].firstarc = p->nextarc;
+	   		free(p);
+				k++;
+				break;
+			} else {
+				p_last->nextarc = p->nextarc;
+				free(p);
+				k++;
+				break;
+			}
+		}
+		p_last = p;
+		p = p->nextarc;
+	}
+	}
+	}
+	} else if (w == G.vertices[i].data.key) {
+	for (int j = 0; j < G.vexnum; j++) {
+	if (v == G.vertices[j].data.key) { //找到了第二个顶点的位置
+	ArcNode *p = G.vertices[i].firstarc;
+	ArcNode *p_last = p;
+	while (p) {
+		if (p->adjvex == j) {
+			if (p == p_last) {
+				G.vertices[i].firstarc = p->nextarc;
+				free(p);
+				k++;
+				break;
+				} else {
+				p_last->nextarc = p->nextarc;
+				free(p);
+				k++;
+				break;
+			}
+		}
+		p_last = p;
+		p = p->nextarc;
+	}
+	}
+	}
+	}
+	}
+	if (k == 0)
+		return ERROR;
+	G.arcnum--;
+	return OK;
+}
+
+//对图G进行深度优先搜索遍历
+KeyType visited[MAX_VERTEX_NUM] = {0}; //储存已经被访问过的结点
+status DFSTraverse(ALGraph &G, int u) {
+	if (visited[u] == 0) { 
+		visit(G.vertices[u].data);
+		visited[u] = 1;
+	}
+	ArcNode *p = G.vertices[u].firstarc;
+
+	while (p) {
+
+		if (visited[p->adjvex] == 0) {
+			u = p->adjvex;
+			DFSTraverse(G, u);
+			visited[p->adjvex] = 1;
+		}
+		p = p->nextarc;
+	}
+
+	for (int i = 0; i < G.vexnum; i++) { 
+
+		if (visited[i] == 0) {
+			u = i;
+			DFSTraverse(G, u);
+		}
+	}
+	return OK;
+}
+
+//对图G进行广度优先搜索遍历
+status BFSTraverse(ALGraph &G) {
+	for (int i = 0; i < MAX_VERTEX_NUM; i++)
+		visited[i] = 0;
+
+	for (int i = 0; i < G.vexnum; i++) {
+
+		if (visited[i] == 0) { //该结点
+			visit(G.vertices[i].data);
+			visited[i] = 1;
+		}
+		ArcNode *p = G.vertices[i].firstarc;
+
+		while (p) {
+			if (visited[p->adjvex] == 0) {
+				visit(G.vertices[p->adjvex].data);
+				visited[p->adjvex] = 1;
+			}
+			p = p->nextarc;
+		}
+	}
+	return OK;
+}
+
+//求距离小于k的顶点集合，返回值为顶点个数，获取失败则返回ERROR
+int VerticesSetLessThanK(ALGraph G, VertexType *V, KeyType v, int k) {
+	int index = -1, num = 0, s = 1; 
+	for (int i = 0; i < G.vexnum; i++)
+		if (G.vertices[i].data.key == v)
+			index = i;
+	if (index == -1)
+		return ERROR;
+	KeyType visited[MAX_VERTEX_NUM] = {0};
+	KeyType distance[MAX_VERTEX_NUM]; //记录与目标结点的距离
+	for (int i = 0; i < MAX_VERTEX_NUM; i++)
+		distance[i] = -1;
+	visited[index] = 1;
+	distance[index] = 0;
+	V[num++] = G.vertices[index].data;
+	while (s < k) { //求小于等于k的路径
+		for (int i = 0; i < G.vexnum; i++) {
+		if (distance[i] == s - 1) { 
+		ArcNode *p = G.vertices[i].firstarc;
+		while (p) {
+			if (visited[p->adjvex] == 0) { //未被访问
+			visited[p->adjvex] = 1;
+			distance[p->adjvex] = s;
+			V[num++] = G.vertices[p->adjvex].data;
+		}
+		p = p->nextarc;
+		}
+		}
+		}
+		s++;
+	}
+	return num;
+}
+
+//求两个顶点的最短路径，返回值为两顶点距离，采用狄克斯特拉算法
+int ShortestPathLength(ALGraph G, KeyType v, KeyType w) {
+	int distance[MAX_VERTEX_NUM], visited[MAX_VERTEX_NUM] = {0};
+	for (int i = 0; i < MAX_VERTEX_NUM; i++)
+		distance[i] = -1;
+	int index = -1, s = 1, flag = 0; 
+            //flag保证在一次操作中不是没有执行任务，s是当前路径长度
+	for (int i = 0; i < G.vexnum; i++)
+		if (G.vertices[i].data.key == v)
+			index = i;
+	if (index == -1) //v顶点不存在
+		return ERROR;
+	visited[index] = 1;
+	distance[index] = 0;
+	while (1) {    //求小于等于k的路径
+		flag = 0;
+		for (int i = 0; i < G.vexnum; i++) {
+		if (distance[i] == s - 1) { 
+                    //在上一轮刚被标记或者是第一轮
+		ArcNode *p = G.vertices[i].firstarc;
+		while (p) {
+		if (G.vertices[p->adjvex].data.key == w) { 
+                //找到了需要访问的另一个顶点
+			return s;
+		}
+		if (visited[p->adjvex] == 0) { //未被访问
+			visited[p->adjvex] = 1;
+			distance[p->adjvex] = s;
+			flag = 1; 
+		}
+		p = p->nextarc;
+		}
+		}
+		}
+		if (flag == 0)
+			return ERROR;
+		s++;
+	}
+}
+
+int main( ) {
+	ALGraph G;
+	int op = 1;
+	int j, i = 0, begin = 0, k;
+	KeyType v, w, u;
+	VertexType V[30], value;
+	KeyType VR[100][2];
+	while (op) {
+	system("cls");
+	printf("\n");
+	printf("   Menu for Linear Table On Sequence Structure \n");
+	printf("----------------------------------------------\n");
+	printf("    	1. CreateCraph （创建图）\n");
+	printf("        2. DestroyGraph （销毁图）\n");
+	printf("    	3. LocateVex （查找顶点）\n");
+	printf("        4. PutVex  （顶点赋值）\n");
+	printf("    	5. FirstAdjVex （获得第一邻接顶点）\n");
+	printf("        6. NextAdjVex （获得下一邻接顶点）\n");
+	printf("    	7. InsertVex （插入顶点）\n");
+	printf("        8. DeleteVex （删除顶点）\n");
+	printf("    	9. InsertArc （插入弧）\n");
+	printf("        10.DeleteArc （删除弧）\n");
+	printf("    	11.DFSTraverse （深度优先遍历）\n");
+	printf("        12.BFSTraverse （广度优先遍历）\n");
+	printf("        13.VertexType （距离小于k的顶点集）\n");
+	printf("        14.ShortestPathLength （顶点最短路径）\n");
+	printf("        20.print （输出结点信息）\n");
+	printf("        0. Exit （退出菜单）\n");
+	printf("----------------------------------------------\n");
+	printf("   请选择你的操作[0~14]:");
+	scanf("%d", &op);
+	switch (op) {
+	case 1:
+		if (begin == 1) {
+			printf("创建失败，图已存在\n");
+		} else {
+			printf("请输入顶点数据\n");
+			do {
+				scanf("%d%s", &V[i].key, V[i].others);
+			} while (V[i++].key != -1);
+			i = 0;
+			printf("请输入边的数据\n");
+			do {
+				scanf("%d%d", &VR[i][0], &VR[i][1]);
+			} while (VR[i++][0] != -1);
+			j = CreateCraph(G, V, VR);
+			if (j == OK) {
+				printf("创建成功");
+				begin = 1;
+			} else
+				printf("创建失败");
+		}
+		getchar();
+		getchar();
+		break;
+	case 2:
+		j = DestroyGraph(G);
+		if ( j == OK) {
+			printf("图销毁成功！\n");
+			begin = 0;
+		} else
+			printf("图销毁失败！\n");
+		getchar();
+		getchar();
+		break;
+	case 3:
+		printf("请输入想要查找的关键字");
+		scanf("%d", &u);
+		j = LocateVex(G, u);
+		if (j == -1)
+			printf("查找失败");
+		else
+			printf("查找成功\n%d %s", 
+                G.vertices[j].data.key, G.vertices[j].data.others);
+		getchar();
+		getchar();
+		break;
+	case 4:
+		printf("输入顶点关键字并赋值\n");
+		scanf("%d %d %s", &u, &value.key, value.others);
+			j = PutVex(G, u, value);
+		if (j == OK)
+			printf("赋值成功\n");
+		else
+			printf("赋值失败！\n");
+		getchar();
+		getchar();
+		break;
+	case 5:
+		printf("输入获取的关键字\n");
+		scanf("%d", &u);
+		j = FirstAdjVex(G, u);
+		if ( j == -1)
+			printf("查找失败\n");
+		else
+			printf("查找成功\n%d %s\n",
+                G.vertices[j].data.key, G.vertices[j].data.others);
+		getchar();
+		getchar();
+		break;
+	case 6:
+		printf("输入关键字的下一邻接点\n");
+		scanf("%d %d", &v, &w);
+		j = NextAdjVex(G, v, w);
+		if ( j == -1)
+			printf("获取失败\n");
+		else
+			printf("获取成功\n%d %s\n", 
+                G.vertices[j].data.key, G.vertices[j].data.others);
+		getchar();
+		getchar();
+		break;
+	case 7:
+		printf("输入要插入的顶点关键字\n");
+		scanf("%d %s", &value.key, value.others);
+		j = InsertVex(G, value);
+		if (j == OK)
+			printf("插入成功\n");
+		else
+			printf("插入失败\n");
+		getchar();
+		getchar();
+		break;
+	case 8:
+		printf("输入要删除的关键字\n");
+		scanf("%d", &v);
+		j = DeleteVex(G, v);
+		if (j == ERROR)
+			printf("删除失败");
+		else
+			printf("删除成功");
+		getchar();
+		getchar();
+		break;
+	case 9:
+		printf("输入要插入的边\n");
+		scanf("%d %d", &v, &w);
+		j = InsertArc(G, v, w);
+		if (j == ERROR)
+			printf("插入失败");
+		else
+			printf("插入成功");
+		getchar();
+		getchar();
+		break;
+	case 10:
+		printf("输入要删除的边\n");
+		scanf("%d %d", &v, &w);
+		j = DeleteArc(G, v, w);
+		if (j == OK)
+			printf("删除成功！\n");
+		else
+			printf("删除失败！\n");
+		getchar();
+		getchar();
+		break;
+	case 11:
+		printf("深度优先遍历：\n");
+		DFSTraverse(G, 0);
+		for (i = 0; i < MAX_VERTEX_NUM; i++)
+			visited[i] = 0;
+		getchar();
+		getchar();
+		break;
+	case 12:
+		printf("广度优先遍历：\n");
+		BFSTraverse(G);
+		for (i = 0; i < MAX_VERTEX_NUM; i++)
+			visited[i] = 0;
+		getchar();
+		getchar();
+		break;
+	case 13:
+		printf("输入顶点关键字以及距离:\n");
+		scanf("%d %d", &v, &k);
+		for (i = 0; i < 30; i++) {
+			V[i].key = 0;
+			strcpy(V[i].others, "\0");
+		}
+		j = VerticesSetLessThanK(G, V, v, k);
+		if (j == ERROR) {
+			printf("获取失败");
+		} else {
+			printf("以获得顶点集V\n总个数为%d\n", j);
+		for (i = 0; i < j; i++) {
+				visit(V[i]);
+			}
+		}
+		getchar();
+		getchar();
+		break;
+	case 14:
+		printf("输入两个顶点关键字:\n");
+		scanf("%d %d", &v, &w);
+		j = ShortestPathLength(G, v, w);
+		if (j == ERROR) {
+			printf("获取失败");
+		} else {
+			printf("最短距离为%d\n", j);
+		}
+		getchar();
+		getchar();
+		break;
+	case 20:
+            print(G);
+		getchar();
+		getchar();
+		break;
+	}//end of switch
+        }//end of while
+	printf("欢迎下次再使用本系统！\n");
+	return 0;
+}//end of main()
+
+\end{lstlisting}
+
+\end{document}

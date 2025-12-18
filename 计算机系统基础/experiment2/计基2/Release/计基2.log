@@ -1,0 +1,13 @@
+﻿  lab2.c
+D:\计算机系统基础实验\计基2\计基2\lab2.c(34,10): warning C4477: “scanf”: 格式字符串“%d”需要类型“int *”的参数，但可变参数 1 拥有了类型“short *”
+      D:\计算机系统基础实验\计基2\计基2\lab2.c(34,10):
+      请考虑在格式字符串中使用“%hd”
+  
+LINK : warning LNK4098: 默认库“libcmt.lib”与其他库的使用冲突；请使用 /NODEFAULTLIB:library
+  正在生成代码
+  2 of 12 functions (16.7%) were compiled, the rest were copied from previous compilation.
+    1 functions were new in current compilation
+    1 functions had inline decision re-evaluated but remain unchanged
+  已完成代码的生成
+任务2.obj : error LNK2026: 模块对于 SAFESEH 映像是不安全的。
+D:\计算机系统基础实验\计基2\Release\计基2.exe : fatal error LNK1281: 无法生成 SAFESEH 映像。

@@ -1,0 +1,54 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\Code\\systemBasics\\experiment3\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{C853422B-F21A-47B2-ACFF-FBA15CB50F42}|\u8BA1\u57FA2\\\u8BA1\u57FA2.vcxproj|D:\\Code\\systemBasics\\experiment3\\\u8BA1\u57FA2\\experiment3.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{C853422B-F21A-47B2-ACFF-FBA15CB50F42}|\u8BA1\u57FA2\\\u8BA1\u57FA2.vcxproj|solutionrelative:\u8BA1\u57FA2\\experiment3.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C853422B-F21A-47B2-ACFF-FBA15CB50F42}|\u8BA1\u57FA2\\\u8BA1\u57FA2.vcxproj|D:\\Code\\systemBasics\\experiment3\\\u8BA1\u57FA2\\calculateAverage.asm||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{C853422B-F21A-47B2-ACFF-FBA15CB50F42}|\u8BA1\u57FA2\\\u8BA1\u57FA2.vcxproj|solutionrelative:\u8BA1\u57FA2\\calculateAverage.asm||{8B382828-6202-11D1-8870-0000F87579D2}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "calculateAverage.asm",
+              "DocumentMoniker": "D:\\Code\\systemBasics\\experiment3\\\u8BA1\u57FA2\\calculateAverage.asm",
+              "RelativeDocumentMoniker": "\u8BA1\u57FA2\\calculateAverage.asm",
+              "ToolTip": "D:\\Code\\systemBasics\\experiment3\\\u8BA1\u57FA2\\calculateAverage.asm",
+              "RelativeToolTip": "\u8BA1\u57FA2\\calculateAverage.asm",
+              "ViewState": "AgIAAFcAAAAAAAAAAAAewFsAAAAEAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2025-03-30T10:07:26.904Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "experiment3.c",
+              "DocumentMoniker": "D:\\Code\\systemBasics\\experiment3\\\u8BA1\u57FA2\\experiment3.c",
+              "RelativeDocumentMoniker": "\u8BA1\u57FA2\\experiment3.c",
+              "ToolTip": "D:\\Code\\systemBasics\\experiment3\\\u8BA1\u57FA2\\experiment3.c",
+              "RelativeToolTip": "\u8BA1\u57FA2\\experiment3.c",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
+              "WhenOpened": "2025-03-20T10:18:18.263Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

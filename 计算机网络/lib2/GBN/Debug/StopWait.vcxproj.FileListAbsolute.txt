@@ -1,0 +1,3 @@
+D:\Code\network\gitee\实验二\GBN\Debug\StopWait.exe
+D:\Code\network\ex1\实验二\GBN\Debug\StopWait.exe
+D:\Code\network\lib2\GBN\Debug\StopWait.exe

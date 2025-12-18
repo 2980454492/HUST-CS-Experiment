@@ -1,0 +1,69 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\Code\\network\\lib2\\EasyTCP\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{B9E23A03-9974-40AE-9555-138B5F2FEDA4}|StopWait.vcxproj|D:\\Code\\network\\lib2\\EasyTCP\\StopWaitRdtSender.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{B9E23A03-9974-40AE-9555-138B5F2FEDA4}|StopWait.vcxproj|solutionrelative:StopWaitRdtSender.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B9E23A03-9974-40AE-9555-138B5F2FEDA4}|StopWait.vcxproj|D:\\Code\\network\\lib2\\EasyTCP\\StopWaitRdtReceiver.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{B9E23A03-9974-40AE-9555-138B5F2FEDA4}|StopWait.vcxproj|solutionrelative:StopWaitRdtReceiver.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B9E23A03-9974-40AE-9555-138B5F2FEDA4}|StopWait.vcxproj|D:\\Code\\network\\lib2\\EasyTCP\\StopWait.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{B9E23A03-9974-40AE-9555-138B5F2FEDA4}|StopWait.vcxproj|solutionrelative:StopWait.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "StopWaitRdtSender.cpp",
+              "DocumentMoniker": "D:\\Code\\network\\lib2\\EasyTCP\\StopWaitRdtSender.cpp",
+              "RelativeDocumentMoniker": "StopWaitRdtSender.cpp",
+              "ToolTip": "D:\\Code\\network\\lib2\\EasyTCP\\StopWaitRdtSender.cpp",
+              "RelativeToolTip": "StopWaitRdtSender.cpp",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2025-10-11T10:14:48.61Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "StopWaitRdtReceiver.cpp",
+              "DocumentMoniker": "D:\\Code\\network\\lib2\\EasyTCP\\StopWaitRdtReceiver.cpp",
+              "RelativeDocumentMoniker": "StopWaitRdtReceiver.cpp",
+              "ToolTip": "D:\\Code\\network\\lib2\\EasyTCP\\StopWaitRdtReceiver.cpp",
+              "RelativeToolTip": "StopWaitRdtReceiver.cpp",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACUAAAAvAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2025-10-11T10:14:43.745Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "StopWait.cpp",
+              "DocumentMoniker": "D:\\Code\\network\\lib2\\EasyTCP\\StopWait.cpp",
+              "RelativeDocumentMoniker": "StopWait.cpp",
+              "ToolTip": "D:\\Code\\network\\lib2\\EasyTCP\\StopWait.cpp",
+              "RelativeToolTip": "StopWait.cpp",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2025-10-11T10:13:47.199Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

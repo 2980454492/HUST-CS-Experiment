@@ -1,0 +1,2 @@
+﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\amd64\Microsoft.Common.CurrentVersion.targets(2189,5): warning MSB9008: 引用的项目 ..\netsimlib\netsimlib.vcxproj 不存在。
+  StopWait.vcxproj -> D:\Code\network\lib2\SR\Debug\StopWait.exe

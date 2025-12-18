@@ -1,0 +1,6 @@
+﻿  experiment1.cpp
+D:\Code\systemBasics\experiment1\experiment1.cpp(22,21): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+D:\Code\systemBasics\experiment1\experiment1.cpp(38,23): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+D:\Code\systemBasics\experiment1\experiment1.cpp(52,40): warning C4267: “+=”: 从“size_t”转换到“int”，可能丢失数据
+D:\Code\systemBasics\experiment1\experiment1.cpp(64,42): warning C4267: “+=”: 从“size_t”转换到“int”，可能丢失数据
+  experiment1.vcxproj -> D:\Code\systemBasics\experiment1\x64\Debug\experiment1.exe
